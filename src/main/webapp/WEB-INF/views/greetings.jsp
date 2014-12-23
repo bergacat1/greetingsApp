@@ -11,6 +11,6 @@
         </c:forEach>
     </c:if>
     </ul>
-    <p><a href="greetings/form">Add</a></p>
+    <p><a href="greetings/form">Add new greeting</a></p>
 </body>
 </html>
