@@ -80,10 +80,10 @@ public class GreetingController {
 // LIST
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Greeting> list(@RequestParam(required=false, defaultValue="0") int page,
+    public Iterable<String> list(@RequestParam(required=false, defaultValue="0") int page,
                                    @RequestParam(required=false, defaultValue="10") int size) {
         PageRequest request = new PageRequest(page, size);
-        return greetingRepository.findAll(request).getContent();
+        return regions.keySet();
     }
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
