@@ -7,11 +7,11 @@ import java.util.Observable;
  * Created by http://rhizomik.net/~roberto/
  */
 
-public class Cloudy extends Observable implements Weather {
+public class Rain extends Observable implements Weather {
 
 
-    public static final Cloudy cloudy = new Cloudy();
+    public static final Rain rain = new Rain();
 
-    private Cloudy(){}
+    private Rain(){}
 
 }
