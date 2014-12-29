@@ -6,7 +6,7 @@ import java.util.Observable;
 /**
  * Created by http://rhizomik.net/~roberto/
  */
-@Entity
+
 public class Cloudy extends Observable {
 
 
