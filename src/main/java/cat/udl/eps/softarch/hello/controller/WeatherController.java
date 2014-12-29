@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cat.udl.eps.softarch.hello.model.*;
 import cat.udl.eps.softarch.hello.repository.GreetingRepository;
+import cat.udl.eps.softarch.hello.util.XQueryHelper;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +117,9 @@ public class WeatherController {
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
+
+        XQueryHelper.prova();
+
         return new ModelAndView("regions", "regions", list(page, size));
     }
 
