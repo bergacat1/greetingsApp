@@ -1,6 +1,5 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import cat.udl.eps.softarch.hello.model.Greeting;
@@ -10,14 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -25,8 +19,8 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/greetings")
-public class GreetingController {
-    final Logger logger = LoggerFactory.getLogger(GreetingController.class);
+public class WeatherController {
+    final Logger logger = LoggerFactory.getLogger(WeatherController.class);
 
     @Autowired GreetingRepository greetingRepository;
 
