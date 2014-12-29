@@ -61,7 +61,7 @@ public class GreetingControllerTest {
         mockMvc.perform(get("/greetings").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(view().name("greetings"))
-                .andExpect(forwardedUrl("/WEB-INF/views/greetings.jsp"))
+                .andExpect(forwardedUrl("/WEB-INF/views/regions.jsp"))
                 .andExpect(model().attributeExists("greetings"))
                 .andExpect(model().attribute("greetings", hasSize(startSize)))
                 .andExpect(model().attribute("greetings", hasItem( allOf(
