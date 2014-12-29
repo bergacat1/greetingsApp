@@ -2,7 +2,8 @@ package cat.udl.eps.softarch.hello.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import cat.udl.eps.softarch.hello.model.Greeting;
+
+import cat.udl.eps.softarch.hello.model.*;
 import cat.udl.eps.softarch.hello.repository.GreetingRepository;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
@@ -68,6 +69,39 @@ public class WeatherController {
             put("Valles Occidental",40);
             put("Valles Oriental",41);
         }
+    };
+
+    private static final Map<Integer, Weather> weathers = new HashMap<Integer, Weather>(){
+        {
+            put(1, Sunny.sunny);
+            put(2, Sunny.sunny);
+            put(3, SunnyAndCloudy.sunnyAndCloudy);
+            put(4, Cloudy.cloudy);
+            put(5, Rain.rain);
+            put(6, Rain.rain);
+            put(7, Rain.rain);
+            put(8, Thunderstorm.thunderstorm);
+            put(9, Thunderstorm.thunderstorm);
+            put(10, Snow.snow);
+            put(11, Foggy.foggy);
+            put(12, Foggy.foggy);
+            put(13, Snow.snow);
+            put(20, Cloudy.cloudy);
+            put(21, Cloudy.cloudy);
+            put(22, Sunny.sunny);
+            put(23, Rain.rain);
+            put(24, Thunderstorm.thunderstorm);
+            put(25, Rain.rain);
+            put(26, Rain.rain);
+            put(27, Snow.snow);
+            put(28, SnowThunderstorm.snowThunderstorm);
+            put(29, Rain.rain);
+            put(30, Rain.rain);
+            put(31, Rain.rain);
+            put(32, Rain.rain);
+        }
+
+
     };
 
 
