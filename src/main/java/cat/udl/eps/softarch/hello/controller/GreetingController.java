@@ -1,6 +1,9 @@
 package cat.udl.eps.softarch.hello.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import cat.udl.eps.softarch.hello.model.Greeting;
 import cat.udl.eps.softarch.hello.repository.GreetingRepository;
 import com.google.common.base.Preconditions;
@@ -28,18 +31,24 @@ public class GreetingController {
 
     @Autowired GreetingRepository greetingRepository;
 
+    private static final Map<String,Integer> regions = new HashMap<String,Integer>(){
+        {
+            put("Alt Camp", 1);
+            put("Alt Emporda", 2);
+        }
+    };
 // LIST
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Greeting> list(@RequestParam(required=false, defaultValue="0") int page,
+    public Iterable<String> list(@RequestParam(required=false, defaultValue="0") int page,
                                    @RequestParam(required=false, defaultValue="10") int size) {
         PageRequest request = new PageRequest(page, size);
-        return greetingRepository.findAll(request).getContent();
+        return regions.keySet();
     }
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
-        return new ModelAndView("greetings", "greetings", list(page, size));
+        return new ModelAndView("regions", "regions", list(page, size));
     }
 
 // RETRIEVE

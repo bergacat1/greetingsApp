@@ -5,9 +5,9 @@
 <body>
 <h2>Greetings List</h2>
     <ul>
-    <c:if test="${not empty greetings}">
-        <c:forEach var="greeting" items="${greetings}">
-        <li><a href="/greetings/${greeting.getId()}">${greeting.getId()}</a>: ${fn:escapeXml(greeting.getContent())}</li>
+    <c:if test="${not empty regions}">
+        <c:forEach var="region" items="${regions}">
+        <li>${region}</li>
         </c:forEach>
     </c:if>
     </ul>
