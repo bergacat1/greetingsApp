@@ -48,7 +48,7 @@ public class GreetingController {
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
-        return new ModelAndView("regions", "regions", list(page, size));
+        return new ModelAndView("greetings", "regions", list(page, size));
     }
 
 // RETRIEVE
