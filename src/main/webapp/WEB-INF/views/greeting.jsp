@@ -4,16 +4,10 @@
 <html>
 <body>
 
-<p><a href="/greetings">Greetings</a></p>
+<c:if test="${not empty region}">
+    <h2>Temps de la comarca: ${region}</h2>
 
-<c:if test="${not empty greeting}">
-    <h2>Greeting number ${greeting.getId()}</h2>
-    <p>Message: ${fn:escapeXml(greeting.getContent())} (<a href="/greetings/${greeting.getId()}/form">edit</a>)</p>
-    <p>By ${greeting.getEmail()} on ${greeting.getDate()}</p>
-
-    <form:form method="DELETE" action="/greetings/${greeting.getId()}">
-        <p><input type="submit" value="Delete"/></p>
-    </form:form>
+    <a href="/">Torna a la llista de comarques.</a>
 </c:if>
 
 </body>

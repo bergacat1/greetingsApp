@@ -5,7 +5,7 @@ import java.util.Map;
 
 import cat.udl.eps.softarch.hello.model.*;
 import cat.udl.eps.softarch.hello.repository.GreetingRepository;
-import cat.udl.eps.softarch.hello.util.XQueryHelper;
+//import cat.udl.eps.softarch.hello.util.XQueryHelper;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-@RequestMapping(value = "/greetings")
+@RequestMapping(value = "/")
 public class WeatherController {
     final Logger logger = LoggerFactory.getLogger(WeatherController.class);
 
@@ -118,22 +118,21 @@ public class WeatherController {
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
 
-        XQueryHelper.prova();
+        //XQueryHelper.prova();
 
         return new ModelAndView("regions", "regions", list(page, size));
     }
 
 // RETRIEVE
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET )
+    @RequestMapping(value = "/{comarca}", method = RequestMethod.GET )
     @ResponseBody
-    public Greeting retrieve(@PathVariable( "id" ) Long id) {
-        logger.info("Retrieving greeting number {}", id);
-        Preconditions.checkNotNull(greetingRepository.findOne(id), "Greeting with id %s not found", id);
-        return greetingRepository.findOne(id);
+    public String retrieve(@PathVariable( "comarca" ) String comarca) {
+        logger.info("Retrieving greeting number {}", comarca);
+        return comarca;
     }
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "text/html")
-    public ModelAndView retrieveHTML(@PathVariable( "id" ) Long id) {
-        return new ModelAndView("greeting", "greeting", retrieve(id));
+    @RequestMapping(value = "/{comarca}", method = RequestMethod.GET, produces = "text/html")
+    public ModelAndView retrieveHTML(@PathVariable( "comarca" ) String comarca) {
+        return new ModelAndView("region", "region", retrieve(comarca));
     }
 
 

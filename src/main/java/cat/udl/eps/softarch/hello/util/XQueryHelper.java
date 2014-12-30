@@ -1,5 +1,5 @@
 package cat.udl.eps.softarch.hello.util;
-
+/*
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,19 +14,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.xquery.*;
 
-/**
- * Created by http://rhizomik.net/~roberto/
- */
+
 public class XQueryHelper {
-    private static final Logger  log = Logger.getLogger(XQueryHelper.class.getName());
+    private static final Logger log = Logger.getLogger(XQueryHelper.class.getName());
 
     private XQPreparedExpression expr;
-    private XQConnection         conn;
+    private XQConnection conn;
 
-    private JAXBContext          jaxbContext;
-    private Unmarshaller         jaxbUnmarshaller;
-
-    static final String apiURL   = "http://musicbrainz.org/ws/2/artist/cc2c9c3c-b7bc-4b8b-84d8-4fbd8779e493?inc=releases";
+    private JAXBContext jaxbContext;
+    private Unmarshaller jaxbUnmarshaller;
+    static final String meteocatURL = "http://static-m.meteo.cat/content/opendata/ctermini_comarcal.xml";
+    static final String apiURL = "http://musicbrainz.org/ws/2/artist/cc2c9c3c-b7bc-4b8b-84d8-4fbd8779e493?inc=releases";
     static final String albumsXQ =
             "declare namespace mmd=\"http://musicbrainz.org/ns/mmd-2.0#\";\n"
                     + "declare variable $doc external;\n"
@@ -43,14 +41,18 @@ public class XQueryHelper {
 
     @XmlRootElement
     private static class Song {
-        @XmlElement String title;
-        @XmlElement String artist;
-        @XmlElement String countries;
-        @XmlElement Integer year;
+        @XmlElement
+        String title;
+        @XmlElement
+        String artist;
+        @XmlElement
+        String countries;
+        @XmlElement
+        Integer year;
 
         @Override
         public String toString() {
-            return "Title: "+title+"\n"+"Artist: "+artist+"\n"+"Countries: "+countries+"\n"+"Year: "+year+"\n";
+            return "Title: " + title + "\n" + "Artist: " + artist + "\n" + "Countries: " + countries + "\n" + "Year: " + year + "\n";
         }
     }
 
@@ -77,12 +79,29 @@ public class XQueryHelper {
                 Song song = (Song) jaxbUnmarshaller.unmarshal(item.getNode());
                 songs.add(song);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            close();
         }
-        finally { close(); }
         return songs;
+    }
+
+    public String getRegionWeather(int region) throws XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+
+        String xquery = "declare variable $doc := doc(\"http://static-m.meteo.cat/content/opendata/ctermini_comarcal.xml\");\n"
+                + "for $c in $doc//prediccio[@idcomarca=\"1\"]/variable[@dia=\"1\"]\n"
+                + "return data($c/@simbolmati)";
+
+        URLConnection urlconn = null;
+        urlconn = new URL(meteocatURL).openConnection();
+        XQDataSource xqds = (XQDataSource) Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
+        this.conn = xqds.getConnection();
+        this.expr = conn.prepareExpression(xquery);
+        urlconn.setReadTimeout(50000);
+        XQResultSequence rs = this.expr.executeQuery();
+        return rs.getAtomicValue();
+
     }
 
     private void close() {
@@ -94,14 +113,14 @@ public class XQueryHelper {
         }
     }
 
-    public static void prova(){
+    public static void prova() {
 
         try {
             XQueryHelper xQueryHelper = new XQueryHelper(albumsXQ, new URL(apiURL));
             ArrayList<Song> songs = xQueryHelper.getSongs();
             for (Song song : songs)
                 System.out.println(song);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -113,8 +132,8 @@ public class XQueryHelper {
             ArrayList<Song> songs = xQueryHelper.getSongs();
             for (Song song : songs)
                 System.out.println(song);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
+}*/
