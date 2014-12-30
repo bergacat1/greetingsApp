@@ -88,6 +88,13 @@
             <version>9.3-1102-jdbc41</version>
         </dependency>
 
+        <!--XML -->
+        <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>9.4</version>
+        </dependency>
+
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>

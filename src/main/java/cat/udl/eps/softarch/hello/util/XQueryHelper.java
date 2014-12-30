@@ -1,5 +1,5 @@
 package cat.udl.eps.softarch.hello.util;
-/*
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -136,4 +136,4 @@ public class XQueryHelper {
             e.printStackTrace();
         }
     }
-}*/
+}
