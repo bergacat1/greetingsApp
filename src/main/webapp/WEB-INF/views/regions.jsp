@@ -12,5 +12,6 @@
         </c:forEach>
     </c:if>
 </ul>
+<a href="/newAlert">Crear Alerta </a>
 </body>
 </html>
