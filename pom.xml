@@ -3,13 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>cat.udl.eps.softarch</groupId>
     <artifactId>greetings</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
     <properties>
+        <skipTests>true</skipTests>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
@@ -87,14 +88,26 @@
             <artifactId>postgresql</artifactId>
             <version>9.3-1102-jdbc41</version>
         </dependency>
-
-        <!--XML -->
+        <!-- XML
         <dependency>
-        <groupId>net.sf.saxon</groupId>
-        <artifactId>Saxon-HE</artifactId>
-        <version>9.4</version>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon</artifactId>
+            <scope>system</scope>
+            <version>9.1.0.8</version>
+            <systemPath>${basedir}/lib/saxon-9.1.0.8.jar</systemPath>
         </dependency>
-
+        <dependency>
+            <groupId>net.sf.saxon.xqj</groupId>
+            <artifactId>Saxon-xqj</artifactId>
+            <scope>system</scope>
+            <version>9.1.0.8</version>
+            <systemPath>${basedir}/lib/saxon-9.1.0.8-xqj.jar</systemPath>
+        </dependency> -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.4</version>
+        </dependency>
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>

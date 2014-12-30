@@ -1,12 +1,9 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import cat.udl.eps.softarch.hello.model.*;
 import cat.udl.eps.softarch.hello.repository.GreetingRepository;
-import cat.udl.eps.softarch.hello.util.XQueryHelper;
-import com.google.common.base.Preconditions;
+import cat.udl.eps.softarch.hello.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,21 +114,26 @@ public class WeatherController {
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
-
-        XQueryHelper.prova();
-
         return new ModelAndView("regions", "regions", list(page, size));
     }
 
 // RETRIEVE
     @RequestMapping(value = "/{comarca}", method = RequestMethod.GET )
     @ResponseBody
-    public String retrieve(@PathVariable( "comarca" ) String comarca) {
+    public List retrieve(@PathVariable( "comarca" ) String comarca) {
         logger.info("Retrieving greeting number {}", comarca);
-        return comarca;
+        String regionWeather = "";
+        try {
+            regionWeather = XQueryHelper.getRegionWeather(regions.get(comarca));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Weather weather = weathers.get(Integer.parseInt(regionWeather.substring(0, regionWeather.length() - 4)));
+        return Arrays.asList(comarca, weather.getName(), weather.getImage());
     }
     @RequestMapping(value = "/{comarca}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView retrieveHTML(@PathVariable( "comarca" ) String comarca) {
+        System.out.println("PASO--------------------------------------------------------");
         return new ModelAndView("region", "region", retrieve(comarca));
     }
 

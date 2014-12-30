@@ -87,20 +87,25 @@ public class XQueryHelper {
         return songs;
     }
 
-    public String getRegionWeather(int region) throws XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    public static String getRegionWeather(int region) throws XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
         String xquery = "declare variable $doc := doc(\"http://static-m.meteo.cat/content/opendata/ctermini_comarcal.xml\");\n"
-                + "for $c in $doc//prediccio[@idcomarca=\"1\"]/variable[@dia=\"1\"]\n"
+                + "for $c in $doc//prediccio[@idcomarca=\"" + region + "\"]/variable[@dia=\"1\"]\n"
                 + "return data($c/@simbolmati)";
-
-        URLConnection urlconn = null;
+        XQPreparedExpression expr;
+        XQConnection conn;
+        URLConnection urlconn;
         urlconn = new URL(meteocatURL).openConnection();
         XQDataSource xqds = (XQDataSource) Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
-        this.conn = xqds.getConnection();
-        this.expr = conn.prepareExpression(xquery);
+        conn = xqds.getConnection();
+        expr = conn.prepareExpression(xquery);
         urlconn.setReadTimeout(50000);
-        XQResultSequence rs = this.expr.executeQuery();
-        return rs.getAtomicValue();
+        XQResultSequence rs = expr.executeQuery();
+        if(rs.next()) {
+            return rs.getItemAsString(null);
+        }else{
+            return "";
+        }
 
     }
 

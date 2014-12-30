@@ -4,9 +4,10 @@
 <html>
 <body>
 
-<c:if test="${not empty region}">
-    <h2>Temps de la comarca: ${region}</h2>
-
+<c:if test="${not region.isEmpty()}">
+    <h2>Temps de la comarca: ${region.get(0)}</h2>
+    <p> El temps es: ${region.get(1)}</p>
+    <img src=${region.get(2)} width="420" height="420" />
     <a href="/">Torna a la llista de comarques.</a>
 </c:if>
 
