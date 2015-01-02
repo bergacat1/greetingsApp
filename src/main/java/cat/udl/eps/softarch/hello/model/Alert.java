@@ -1,6 +1,6 @@
 package cat.udl.eps.softarch.hello.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Date;
@@ -11,40 +11,42 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
 @Entity
+@Table(name = "ALERT")
 public class Alert implements Observer, Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "USER", referencedColumnName = "EMAIL")
+    private User user;
 
     @javax.persistence.Transient()
     private Weather weather;
-    @Id
-    @NotNull(message = "E-mail cannot be empty")
-    @Email(message = "E-mail should be valid")
-    private String email;
 
-    @Id
+    @NotNull
+    private String region;
     @NotNull
     private Integer idRegion;
 
-    @Id
-    private String idWeather;
+
 
 
     public Alert() {}
 
 
-    public Alert(String email, Weather weather, Integer idRegion) {
-        this.email = email;
+    public Alert(User user, Weather weather, String region, Integer idRegion) {
+        this.user = user;
         this.weather = weather;
         this.weather.addObserver(this);
+        this.region = region;
         this.idRegion = idRegion;
-        this.idWeather = weather.getName();
     }
 
 
@@ -52,21 +54,13 @@ public class Alert implements Observer, Serializable {
         return weather;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getIdWeather() {
-        return idWeather;
-    }
-
-
     public Integer getIdRegion() {
         return idRegion;
     }
 
-
-
+    public String getRegion() {
+        return region;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -75,6 +69,27 @@ public class Alert implements Observer, Serializable {
             idRegion = (Integer)arg;
             if(idRegion == this.idRegion){} //Enviar correu
         }
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Alert alert = (Alert) o;
+
+        if (!idRegion.equals(alert.idRegion)) return false;
+        if (!user.equals(alert.user)) return false;
+        if (!weather.equals(alert.weather)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = user.hashCode();
+        result = 31 * result + weather.hashCode();
+        result = 31 * result + idRegion.hashCode();
+        return result;
     }
 }

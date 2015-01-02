@@ -10,6 +10,7 @@ import java.util.Observer;
 public interface Weather  {
     public String getName();
     public String getImage();
+    public Weather getInstance();
     public void addObserver(Observer o);
     public void notifyObservers(Object arg);
 }

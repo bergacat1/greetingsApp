@@ -2,7 +2,7 @@ package cat.udl.eps.softarch.hello.controller;
 
 import java.util.*;
 
-import cat.udl.eps.softarch.hello.repository.GreetingRepository;
+import cat.udl.eps.softarch.hello.repository.UserRepository;
 import cat.udl.eps.softarch.hello.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class WeatherController {
     final Logger logger = LoggerFactory.getLogger(WeatherController.class);
 
-    @Autowired GreetingRepository greetingRepository;
-
-    private static final Map<String, Integer> regions = new HashMap<String, Integer>(){
+    public static final Map<String, Integer> regions = new HashMap<String, Integer>(){
         {
             put("Alt Camp",1);
             put("Alt Emporda",2);
@@ -125,15 +123,15 @@ public class WeatherController {
         String regionWeather = "";
         try {
             regionWeather = XQueryHelper.getRegionWeather(regions.get(comarca));
+            Weather weather = weathers.get(Integer.parseInt(regionWeather.substring(0, regionWeather.length() - 4)));
+            return Arrays.asList(comarca, weather.getName(), weather.getImage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Weather weather = weathers.get(Integer.parseInt(regionWeather.substring(0, regionWeather.length() - 4)));
-        return Arrays.asList(comarca, weather.getName(), weather.getImage());
+        return null;
     }
     @RequestMapping(value = "/{comarca}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView retrieveHTML(@PathVariable( "comarca" ) String comarca) {
-        System.out.println("PASO--------------------------------------------------------");
         return new ModelAndView("region", "region", retrieve(comarca));
     }
 

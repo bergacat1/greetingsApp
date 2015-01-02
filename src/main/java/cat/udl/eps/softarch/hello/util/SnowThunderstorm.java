@@ -24,4 +24,9 @@ public class SnowThunderstorm extends Observable implements Weather {
     public String getImage() {
         return img;
     }
+
+    @Override
+    public Weather getInstance() {
+        return snowThunderstorm;
+    }
 }

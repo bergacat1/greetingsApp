@@ -8,8 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import cat.udl.eps.softarch.hello.config.GreetingsAppTestContext;
-import cat.udl.eps.softarch.hello.model.Greeting;
-import cat.udl.eps.softarch.hello.repository.GreetingRepository;
+import cat.udl.eps.softarch.hello.model.User;
+import cat.udl.eps.softarch.hello.repository.UserRepository;
 import com.google.common.primitives.Ints;
 import org.junit.After;
 import org.junit.Before;
@@ -30,10 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ContextConfiguration(classes = GreetingsAppTestContext.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class GreetingControllerTest {
-
-    @Autowired
-    GreetingRepository greetingRepository;
+public class WeatherControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -43,10 +40,6 @@ public class GreetingControllerTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-        if (greetingRepository.count()==0) {
-            Greeting g = new Greeting("test1", "test@example.org", new Date());
-            greetingRepository.save(g);
-        }
     }
 
     @After
@@ -56,17 +49,11 @@ public class GreetingControllerTest {
 
     @Test
     public void testList() throws Exception {
-        int startSize = Ints.checkedCast(greetingRepository.count());
 
-        mockMvc.perform(get("/greetings").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(view().name("greetings"))
-                .andExpect(forwardedUrl("/WEB-INF/views/regions.jsp"))
-                .andExpect(model().attributeExists("greetings"))
-                .andExpect(model().attribute("greetings", hasSize(startSize)))
-                .andExpect(model().attribute("greetings", hasItem( allOf(
-                        hasProperty("id", is(1L)),
-                        hasProperty("content", is("test1"))))));
+                .andExpect(view().name("regions"))
+                .andExpect(forwardedUrl("/WEB-INF/views/regions.jsp"));
     }
 
     @Test
@@ -91,7 +78,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        Greeting last = new Greeting("last", "test@example.org", new Date());
+        User last = new User("last", "test@example.org", new Date());
         int nextGreetingId = Ints.checkedCast(greetingRepository.save(last).getId())+1;
         int startSize = Ints.checkedCast(greetingRepository.count());
 
@@ -138,7 +125,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date()));
+        User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
@@ -156,7 +143,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testUpdateEmpty() throws Exception {
-        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date()));
+        User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
@@ -208,7 +195,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testDeleteExisting() throws Exception {
-        Greeting toBeRemoved = greetingRepository.save(new Greeting("toberemoved", "a@b.net", new Date()));
+        User toBeRemoved = greetingRepository.save(new User("toberemoved", "a@b.net", new Date()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(delete("/greetings/{id}", toBeRemoved.getId()).accept(MediaType.TEXT_HTML))

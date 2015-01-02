@@ -1,10 +1,9 @@
 package cat.udl.eps.softarch.hello;
-
+/*
 import cat.udl.eps.softarch.hello.config.GreetingsAppTestContext;
-import cat.udl.eps.softarch.hello.model.Greeting;
-import cat.udl.eps.softarch.hello.repository.GreetingRepository;
+import cat.udl.eps.softarch.hello.model.User;
+import cat.udl.eps.softarch.hello.repository.UserRepository;
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
@@ -20,16 +19,13 @@ import org.springframework.web.context.WebApplicationContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Created by http://rhizomik.net/~roberto/
- */
+
 
 @WebAppConfiguration
 @ContextConfiguration(classes = GreetingsAppTestContext.class)
@@ -38,7 +34,7 @@ public class GreetingsStepdefs {
     static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
-    GreetingRepository greetingRepository;
+    UserRepository greetingRepository;
 
     @Autowired
     private WebApplicationContext wac;
@@ -58,11 +54,11 @@ public class GreetingsStepdefs {
     @Given("^the greetings repository has the following greetings:$")
     public void the_greetings_repository_has_the_following_greetings(DataTable greetings) throws Throwable {
         Long index = 1L;
-        for (Greeting g : greetings.asList(Greeting.class)) {
+        for (User g : greetings.asList(User.class)) {
             if (!greetingRepository.exists(index))
                 greetingRepository.save(g);
             else if (!greetingRepository.findOne(index).getContent().equals(g.getContent())) {
-                Greeting toBeUpdated = greetingRepository.findOne(index);
+                User toBeUpdated = greetingRepository.findOne(index);
                 toBeUpdated.setContent(g.getContent());
                 greetingRepository.save(toBeUpdated);
             }
@@ -163,4 +159,4 @@ public class GreetingsStepdefs {
     public void the_response_is_empty() throws Throwable {
         result.andExpect(content().string(""));
     }
-}
+}*/

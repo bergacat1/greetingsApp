@@ -24,4 +24,9 @@ public class Foggy extends Observable implements Weather{
     public String getImage() {
         return img;
     }
+
+    @Override
+    public Weather getInstance() {
+        return foggy;
+    }
 }
