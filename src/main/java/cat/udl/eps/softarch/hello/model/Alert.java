@@ -44,9 +44,9 @@ public class Alert implements Observer, Serializable {
     public Alert(User user, Weather weather, String region, Integer idRegion) {
         this.user = user;
         this.weather = weather;
-        this.weather.addObserver(this);
         this.region = region;
         this.idRegion = idRegion;
+        this.weather.addObserver(this);
     }
 
 

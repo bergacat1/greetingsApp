@@ -25,7 +25,7 @@ public class User {
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy="user", cascade = CascadeType.ALL)
-    private List<Alert> alerts;
+    public List<Alert> alerts;
 
 
 
@@ -39,7 +39,9 @@ public class User {
     public String getEmail() { return email; }
 
     public void addAlert(Alert alert){
+        System.out.println("ADD--------------------------------------------------");
         this.alerts.add(alert);
+        System.out.println(alerts.toString());
     }
 
     public List<Alert> getAlerts() {

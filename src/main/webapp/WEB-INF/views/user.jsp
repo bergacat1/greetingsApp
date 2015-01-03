@@ -15,8 +15,8 @@
     <h1>Usuari: ${user.getEmail()}</h1>
     <h2>Llista d'alertes</h2>
     <ul>
-        <c:if test="${not empty user.getAlerts()}">
-            <c:forEach var="alert" items="${user.getAlerts()}">
+        <c:if test="${!user.alerts.isEmpty()}">
+            <c:forEach var="alert" items="${user.alerts}">
                 <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather().getName()}</li>
             </c:forEach>
         </c:if>

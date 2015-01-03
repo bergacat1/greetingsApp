@@ -99,24 +99,29 @@ public class WeatherController {
 
 
     };
+    // HOME
+    @RequestMapping(method=RequestMethod.GET, produces="text/html")
+    public ModelAndView homeHTML() {
+        return new ModelAndView("home");
+    }
 
 
 // LIST
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/regions", method = RequestMethod.GET)
     @ResponseBody
     public Iterable<String> list(@RequestParam(required=false, defaultValue="0") int page,
                                    @RequestParam(required=false, defaultValue="10") int size) {
         PageRequest request = new PageRequest(page, size);
         return regions.keySet();
     }
-    @RequestMapping(method=RequestMethod.GET, produces="text/html")
+    @RequestMapping(value = "/regions", method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size) {
         return new ModelAndView("regions", "regions", list(page, size));
     }
 
 // RETRIEVE
-    @RequestMapping(value = "/{comarca}", method = RequestMethod.GET )
+    @RequestMapping(value = "/regions/{comarca}", method = RequestMethod.GET )
     @ResponseBody
     public List retrieve(@PathVariable( "comarca" ) String comarca) {
         logger.info("Retrieving greeting number {}", comarca);
@@ -130,7 +135,7 @@ public class WeatherController {
         }
         return null;
     }
-    @RequestMapping(value = "/{comarca}", method = RequestMethod.GET, produces = "text/html")
+    @RequestMapping(value = "/regions/{comarca}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView retrieveHTML(@PathVariable( "comarca" ) String comarca) {
         return new ModelAndView("region", "region", retrieve(comarca));
     }

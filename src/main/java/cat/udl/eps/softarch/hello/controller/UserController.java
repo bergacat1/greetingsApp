@@ -51,12 +51,14 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public User retrieve(@RequestParam("email") String email) {
-        logger.info("Retrieving user", email);
+        logger.info("Retrieving user: " + email);
         User user = userRepository.findOne(email);
         if (user == null){
+            logger.info("New user: " + email);
             user = new User(email);
             userRepository.save(user);
         }
+        logger.info("User alerts: " + user.alerts.toString());
         return user;
     }
 
