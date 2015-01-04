@@ -13,9 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +21,7 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/users")
 public class UserController {
     final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -47,40 +45,62 @@ public class UserController {
 
     };
 
-    // LIST
+    @RequestMapping(method = RequestMethod.GET, produces = "text/html")
+    public ModelAndView usersHTML() {
+        return new ModelAndView("users");
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public User retrieve(@RequestParam("email") String email) {
-        logger.info("Retrieving user: " + email);
-        User user = userRepository.findOne(email);
+    public void createUserIfNotExists(@RequestParam("username") String username, @RequestParam("email") String email) {
+        logger.info("Retrieving user: " + username);
+        User user = userRepository.findOne(username);
         if (user == null){
-            logger.info("New user: " + email);
-            user = new User(email);
+            user = new User(username, email);
+            logger.info("New user: " + username + email);
             userRepository.save(user);
         }
-        logger.info("User alerts: " + user.alerts.toString());
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
+    public String userHTML(@RequestParam("username") String username, @RequestParam("email") String email) {
+        logger.info("Redirecting user: " + username);
+        createUserIfNotExists(username, email);
+        return "redirect:/users/" + username;
+    }
+
+
+
+    @RequestMapping(value = "/{user}", method = RequestMethod.GET)
+    @ResponseBody
+    public User retrieveUser(@PathVariable("user") String username) {
+        logger.info("Retrieving user: " + username);
+        User user = userRepository.findOne(username);
         return user;
     }
-
-    @RequestMapping(method = RequestMethod.GET, produces = "text/html")
-    public ModelAndView listHTML(@RequestParam("email") String email) {
-        return new ModelAndView("user", "user", retrieve(email));
+    @RequestMapping(value = "/{user}", method = RequestMethod.GET, produces = "text/html")
+    public ModelAndView usersHTML(@PathVariable("user") String username) {
+        User user = retrieveUser(username);
+        logger.info("Created user: " + user.getName());
+        return new ModelAndView("user", "user", user);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/{user}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void create(@RequestParam("email") String email, @RequestParam("region") String region, @RequestParam("weather") String weather) {
+    public void saveAlert(@RequestParam("email") String email,
+                       @RequestParam("region") String region, @RequestParam("weather") String weather) {
         logger.info("Creating alert");
         User user = userRepository.findOne(email);
         Alert newAlert = new Alert(user, weathers.get(weather), region, WeatherController.regions.get(region));
-        alertRepository.save(newAlert);
         user.addAlert(newAlert);
+        userRepository.save(user);
     }
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
-    public String createHTML(@RequestParam("email") String email, @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        create(email, region, weather);
-        return "redirect:/";
+    @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
+    public String reloadHTML(@PathVariable("user") String username, @RequestParam("email") String email,
+                             @RequestParam("region") String region, @RequestParam("weather") String weather) {
+        saveAlert(email, region, weather);
+        return "redirect:/users/" + username;
     }
 
 

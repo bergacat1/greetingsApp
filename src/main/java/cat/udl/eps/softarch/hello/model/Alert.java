@@ -62,6 +62,34 @@ public class Alert implements Observer, Serializable {
         return region;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setIdRegion(Integer idRegion) {
+        this.idRegion = idRegion;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Integer idRegion;

@@ -12,10 +12,6 @@
 
 <h3>Alertes meteorologiques</h3>
 <p>Aqui podreu gestionar les vostres alertes</p>
-<form method="GET" action="/user">
-    <label>Email:</label>
-    <input type="text" name="email"/>
-    <input type="submit" value="Entra"/>
-</form>
+<a href="/users">Gestionar</a>
 </body>
 </html>

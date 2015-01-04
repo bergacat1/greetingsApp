@@ -22,7 +22,7 @@
         </c:if>
     </ul>
 </c:if>
-<form method="POST" action="/user" >
+<form method="POST" action="/users/${user.getEmail()}" >
     <table>
         <tr>
             <td><label>Email:</label></td>

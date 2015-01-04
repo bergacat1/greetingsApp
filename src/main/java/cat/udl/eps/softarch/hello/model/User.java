@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.hello.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Email;
@@ -19,7 +18,12 @@ import javax.validation.constraints.Size;
 public class User {
 
     @Id
-    @NotNull(message = "E-mail cannot be empty")
+    @NotBlank(message = "Username cannot be empty")
+    @Column(name = "USERNAME")
+    @Size(max = 30, message = "The name is too long")
+    private String name;
+
+    @NotBlank(message = "E-mail cannot be empty")
     @Email(message = "E-mail should be valid")
     @Column(name = "EMAIL")
     private String email;
@@ -31,9 +35,18 @@ public class User {
 
     public User() {}
 
-    public User(String email) {
+    public User(String name, String email) {
+        this.name = name;
         this.email = email;
         alerts = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() { return email; }
