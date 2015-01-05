@@ -24,7 +24,7 @@ public class Alert implements Observer, Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "USER", referencedColumnName = "EMAIL")
+    @JoinColumn(name = "USER", referencedColumnName = "USERNAME")
     private User user;
 
     @javax.persistence.Transient()
@@ -47,6 +47,7 @@ public class Alert implements Observer, Serializable {
         this.region = region;
         this.idRegion = idRegion;
         this.weather.addObserver(this);
+        System.out.println("HASH----------------------------------"+weather.hashCode());
     }
 
 
@@ -116,7 +117,7 @@ public class Alert implements Observer, Serializable {
     @Override
     public int hashCode() {
         int result = user.hashCode();
-        result = 31 * result + weather.hashCode();
+        //result = 31 * result + weather.hashCode();
         result = 31 * result + idRegion.hashCode();
         return result;
     }

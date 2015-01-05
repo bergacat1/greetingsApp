@@ -1,5 +1,5 @@
 package cat.udl.eps.softarch.hello.controller;
-/*
+
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -52,30 +52,26 @@ public class WeatherControllerTest {
 
         mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(view().name("regions"))
-                .andExpect(forwardedUrl("/WEB-INF/views/regions.jsp"));
+                .andExpect(view().name("home"))
+                .andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
     }
 
     @Test
     public void testRetrieveExisting() throws Exception {
-        mockMvc.perform(get("/greetings/{id}", 1L).accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get("/regions/{comarca}", "Vall Aran").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(view().name("greeting"))
-                .andExpect(forwardedUrl("/WEB-INF/views/region.jsp"))
-                .andExpect(model().attributeExists("greeting"))
-                .andExpect(model().attribute("greeting", allOf(
-                        hasProperty("id", is(1L)),
-                        hasProperty("content", is("test1")))));
+                .andExpect(view().name("region"))
+                .andExpect(forwardedUrl("/WEB-INF/views/region.jsp"));
     }
 
     @Test
     public void testRetrieveNonExisting() throws Exception {
-        mockMvc.perform(get("/greetings/{id}", 999L).accept(MediaType.TEXT_HTML))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("error"))
-                .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
+        mockMvc.perform(get("/regions/{comarca}", "No Existeix").accept(MediaType.TEXT_HTML))
+                .andExpect(status().isNotFound());
+               // .andExpect(view().name("error"))
+              //  .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
     }
-
+/*
     @Test
     public void testCreate() throws Exception {
         User last = new User("last", "test@example.org", new Date());
@@ -216,5 +212,5 @@ public class WeatherControllerTest {
                 .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
 
         assertEquals(startSize, greetingRepository.count());
-    }
-}*/
+    }*/
+}

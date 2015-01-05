@@ -12,7 +12,7 @@
         quan es doni una determinada situació meteorologica en la comarca que seleccioneu.</p>
 </c:if>
 <c:if test="${user != null}">
-    <h1>Usuari: ${user.getEmail()}</h1>
+    <h1>Usuari: ${user.getName()}</h1>
     <h2>Llista d'alertes</h2>
     <ul>
         <c:if test="${!user.alerts.isEmpty()}">
@@ -22,7 +22,7 @@
         </c:if>
     </ul>
 </c:if>
-<form method="POST" action="/users/${user.getEmail()}" >
+<form method="POST" action="/users/${user.getName()}" >
     <table>
         <tr>
             <td><label>Email:</label></td>

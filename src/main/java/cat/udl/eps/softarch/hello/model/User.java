@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.hello.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "USER")
-public class User {
+public class User implements Serializable{
 
     @Id
     @NotBlank(message = "Username cannot be empty")
@@ -31,14 +32,19 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy="user", cascade = CascadeType.ALL)
     public List<Alert> alerts;
 
-
-
-    public User() {}
-
+    public User(){}
     public User(String name, String email) {
         this.name = name;
         this.email = email;
         alerts = new ArrayList<>();
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAlerts(List<Alert> alerts) {
+        this.alerts = alerts;
     }
 
     public String getName() {
@@ -60,4 +66,6 @@ public class User {
     public List<Alert> getAlerts() {
         return alerts;
     }
+
+    public void removeAlert(Alert a){ alerts.remove(a); }
 }

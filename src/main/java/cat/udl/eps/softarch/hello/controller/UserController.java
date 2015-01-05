@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
+import cat.udl.eps.softarch.hello.service.UserAlertsService;
 import cat.udl.eps.softarch.hello.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     AlertRepository alertRepository;
+    @Autowired
+    UserAlertsService userAlertsService;
 
     private static final Map<String, Weather> weathers = new HashMap<String, Weather>(){
         {
@@ -81,25 +84,30 @@ public class UserController {
     @RequestMapping(value = "/{user}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView usersHTML(@PathVariable("user") String username) {
         User user = retrieveUser(username);
-        logger.info("Created user: " + user.getName());
+        logger.info("Retrieved user: " + user.getName());
         return new ModelAndView("user", "user", user);
     }
 
     @RequestMapping(value = "/{user}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void saveAlert(@RequestParam("email") String email,
+    public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,
                        @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        logger.info("Creating alert");
-        User user = userRepository.findOne(email);
+        logger.info("Creating alert:" + username + region + weather);
+        User user = userRepository.findOne(username);
         Alert newAlert = new Alert(user, weathers.get(weather), region, WeatherController.regions.get(region));
+        userAlertsService.addAlertToUser(newAlert);
+        logger.info(("ALERTA GUARDADA????????????????????????" + userRepository.findOne(newAlert.getUser().getName()).getAlerts().toString()));
+        /*alertRepository.save(newAlert);
         user.addAlert(newAlert);
+        logger.info("USER ALERTS:::::::::::::::::::::::::" + user.getAlerts().toString());
         userRepository.save(user);
+        logger.info("ALERT!!!!!!!!!!!!!!!!!!!!!!" + userRepository.findOne(username).getAlerts().toString());*/
     }
     @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
     public String reloadHTML(@PathVariable("user") String username, @RequestParam("email") String email,
                              @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        saveAlert(email, region, weather);
+        saveAlert(username, email, region, weather);
         return "redirect:/users/" + username;
     }
 
