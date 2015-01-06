@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
+import cat.udl.eps.softarch.hello.util.Weather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by http://rhizomik.net/~roberto/
  */
 @Service
-public class UserGreetingsServiceImpl implements UserAlertsService {
-    final Logger logger = LoggerFactory.getLogger(UserGreetingsServiceImpl.class);
+public class UserAlertsServiceImpl implements UserAlertsService {
+    final Logger logger = LoggerFactory.getLogger(UserAlertsServiceImpl.class);
 
     @Autowired
     AlertRepository alertRepository;
@@ -26,19 +27,19 @@ public class UserGreetingsServiceImpl implements UserAlertsService {
     @Override
     public User getUserAndAlerts(String username) {
         User u = userRepository.findOne(username);
-        logger.info("User {} has {} greetings", u.getName(), u.getAlerts().size());
+        logger.info("User {} has {} alerts", u.getName(), u.getAlerts().size());
         return u;
     }
 
     @Transactional
     @Override
-    public Alert addAlertToUser(Alert a) {
-        User u = userRepository.findOne(a.getUser().getName());
-        //alertRepository.save(a);
-        u.addAlert(a);
+    public Alert addAlertToUser(String username, Weather weather, String region, Integer regionId) {
+        User u = userRepository.findOne(username);
+        Alert newAlert = new Alert(u, weather, region, regionId);
+        alertRepository.save(newAlert);
+        u.addAlert(newAlert);
         userRepository.save(u);
-        logger.info(("ALERTA GUARDADA! -.-.-.--.-.-.-.-...-.-.-.-.-..-.-.-" + userRepository.findOne(a.getUser().getName()).getAlerts().toString()));
-        return a;
+        return newAlert;
     }
 
     @Transactional

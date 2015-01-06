@@ -78,7 +78,7 @@ public class UserController {
     @ResponseBody
     public User retrieveUser(@PathVariable("user") String username) {
         logger.info("Retrieving user: " + username);
-        User user = userRepository.findOne(username);
+        User user = userAlertsService.getUserAndAlerts(username);
         return user;
     }
     @RequestMapping(value = "/{user}", method = RequestMethod.GET, produces = "text/html")
@@ -94,10 +94,7 @@ public class UserController {
     public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,
                        @RequestParam("region") String region, @RequestParam("weather") String weather) {
         logger.info("Creating alert:" + username + region + weather);
-        User user = userRepository.findOne(username);
-        Alert newAlert = new Alert(user, weathers.get(weather), region, WeatherController.regions.get(region));
-        userAlertsService.addAlertToUser(newAlert);
-        logger.info(("ALERTA GUARDADA????????????????????????" + userRepository.findOne(newAlert.getUser().getName()).getAlerts().toString()));
+        userAlertsService.addAlertToUser(username, weathers.get(weather), region, WeatherController.regions.get(region));
         /*alertRepository.save(newAlert);
         user.addAlert(newAlert);
         logger.info("USER ALERTS:::::::::::::::::::::::::" + user.getAlerts().toString());

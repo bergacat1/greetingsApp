@@ -29,7 +29,7 @@ public class User implements Serializable{
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy="user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
     public List<Alert> alerts;
 
     public User(){}
