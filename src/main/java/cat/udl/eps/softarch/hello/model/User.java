@@ -8,33 +8,32 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
  * Created by http://rhizomik.net/~roberto/
  */
 @Entity
-@Table(name = "USER")
+//@Table(username = "USER")
 public class User implements Serializable{
 
     @Id
     @NotBlank(message = "Username cannot be empty")
-    @Column(name = "USERNAME")
-    @Size(max = 30, message = "The name is too long")
-    private String name;
+    //@Column(username = "USERNAME")
+    @Size(max = 30, message = "The username is too long")
+    private String username;
 
     @NotBlank(message = "E-mail cannot be empty")
     @Email(message = "E-mail should be valid")
-    @Column(name = "EMAIL")
+    //@Column(username = "EMAIL")
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
     public List<Alert> alerts;
 
     public User(){}
-    public User(String name, String email) {
-        this.name = name;
+    public User(String username, String email) {
+        this.username = username;
         this.email = email;
         alerts = new ArrayList<>();
     }
@@ -47,12 +46,12 @@ public class User implements Serializable{
         this.alerts = alerts;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() { return email; }
@@ -68,4 +67,26 @@ public class User implements Serializable{
     }
 
     public void removeAlert(Alert a){ alerts.remove(a); }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!alerts.equals(user.alerts)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!username.equals(user.username)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + alerts.size();
+        return result;
+    }
 }

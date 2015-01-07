@@ -24,6 +24,15 @@ import javax.validation.Valid;
 @RequestMapping(value = "/")
 public class WeatherController {
     final Logger logger = LoggerFactory.getLogger(WeatherController.class);
+    public static Weather sunny = new Weather("Sol", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkZfjxP78i1XOVE5rmRW3VBzy4WpxrPLUW34r3CLWG2K6-B_zsXw");
+    public static Weather cloudy = new Weather("Ennubolat", "http://www.factoryfy.com/wp-content/uploads/2013/04/nubeilustradora1.jpg");
+    public static Weather foggy = new Weather("Boira", "http://www.clipartbest.com/cliparts/4cb/oRo/4cboRoMcg.jpeg");
+    public static Weather rain = new Weather("Pluja", "http://us.123rf.com/450wm/lineartestpilot/lineartestpilot1408/lineartestpilot140802312/30780785-nube-de-lluvia-de-dibujos-animados.jpg");
+    public static Weather snow = new Weather("Neu", "http://franciscoponce.com/wp-content/uploads/2007/12/Nieve_y_Navidad.jpg");
+    public static Weather snowThunderstorm = new Weather("Tempesta de neu", "http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2013/2/6/1360155536870/Thundersnow-will-this-bec-011.jpg");
+    public static Weather sunnyAndCloudy = new Weather("Sol i nubols", "http://thumb7.shutterstock.com/display_pic_with_logo/540784/104489459/stock-photo-sun-character-and-cloud-as-a-symbol-of-sunny-weather-peeking-through-a-cloudy-sky-showing-fun-104489459.jpg");
+    public static Weather thunderstorm = new Weather("Tempesta", "http://previews.123rf.com/images/bruno1998/bruno19981105/bruno1998110500022/9517548-cartoon-illustration-showing-an-angry-dark-cloud-with-lightning-coming-out-of-it.jpg");
+
 
     public static final Map<String, Integer> regions = new HashMap<String, Integer>(){
         {
@@ -71,34 +80,34 @@ public class WeatherController {
         }
     };
 
-    private static final Map<Integer, Weather> weathers = new HashMap<Integer, Weather>(){
+    public static final Map<Integer, Weather> weathers = new HashMap<Integer, Weather>(){
         {
-            put(1, Sunny.sunny);
-            put(2, Sunny.sunny);
-            put(3, SunnyAndCloudy.sunnyAndCloudy);
-            put(4, Cloudy.cloudy);
-            put(5, Rain.rain);
-            put(6, Rain.rain);
-            put(7, Rain.rain);
-            put(8, Thunderstorm.thunderstorm);
-            put(9, Thunderstorm.thunderstorm);
-            put(10, Snow.snow);
-            put(11, Foggy.foggy);
-            put(12, Foggy.foggy);
-            put(13, Snow.snow);
-            put(20, Cloudy.cloudy);
-            put(21, Cloudy.cloudy);
-            put(22, Sunny.sunny);
-            put(23, Rain.rain);
-            put(24, Thunderstorm.thunderstorm);
-            put(25, Rain.rain);
-            put(26, Rain.rain);
-            put(27, Snow.snow);
-            put(28, SnowThunderstorm.snowThunderstorm);
-            put(29, Rain.rain);
-            put(30, Rain.rain);
-            put(31, Rain.rain);
-            put(32, Rain.rain);
+            put(1, sunny);
+            put(2, sunny);
+            put(3, sunnyAndCloudy);
+            put(4, cloudy);
+            put(5, rain);
+            put(6, rain);
+            put(7, rain);
+            put(8, thunderstorm);
+            put(9, thunderstorm);
+            put(10, snow);
+            put(11, foggy);
+            put(12, foggy);
+            put(13, snow);
+            put(20, cloudy);
+            put(21, cloudy);
+            put(22, sunny);
+            put(23, rain);
+            put(24, thunderstorm);
+            put(25, rain);
+            put(26, rain);
+            put(27, snow);
+            put(28, snowThunderstorm);
+            put(29, rain);
+            put(30, rain);
+            put(31, rain);
+            put(32, rain);
         }
 
 

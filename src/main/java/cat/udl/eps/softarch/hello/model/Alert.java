@@ -16,47 +16,35 @@ import javax.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "ALERT")
-public class Alert implements Observer, Serializable {
+//@Table(name = "ALERT")
+public class Alert implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "USER", referencedColumnName = "USERNAME")
     private User user;
 
-    @javax.persistence.Transient()
-    private Weather weather;
+    @NotBlank
+    private String weather;
 
-    @NotNull
+    @NotBlank
     private String region;
-    @NotNull
-    private Integer idRegion;
-
-
-
 
     public Alert() {}
 
 
-    public Alert(User user, Weather weather, String region, Integer idRegion) {
+    public Alert(User user, String weather, String region) {
         this.user = user;
         this.weather = weather;
         this.region = region;
-        this.idRegion = idRegion;
-        this.weather.addObserver(this);
         System.out.println("HASH----------------------------------"+weather.hashCode());
     }
 
 
-    public Weather getWeather() {
+    public String getWeather() {
         return weather;
-    }
-
-    public Integer getIdRegion() {
-        return idRegion;
     }
 
     public String getRegion() {
@@ -79,25 +67,12 @@ public class Alert implements Observer, Serializable {
         this.user = user;
     }
 
-    public void setWeather(Weather weather) {
+    public void setWeather(String weather) {
         this.weather = weather;
     }
 
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    public void setIdRegion(Integer idRegion) {
-        this.idRegion = idRegion;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        Integer idRegion;
-        if(arg instanceof Integer){
-            idRegion = (Integer)arg;
-            if(idRegion == this.idRegion){} //Enviar correu
-        }
     }
 
     @Override
@@ -107,7 +82,8 @@ public class Alert implements Observer, Serializable {
 
         Alert alert = (Alert) o;
 
-        if (!idRegion.equals(alert.idRegion)) return false;
+        if (id != alert.id) return false;
+        if (!region.equals(alert.region)) return false;
         if (!user.equals(alert.user)) return false;
         if (!weather.equals(alert.weather)) return false;
 
@@ -116,9 +92,10 @@ public class Alert implements Observer, Serializable {
 
     @Override
     public int hashCode() {
-        int result = user.hashCode();
-        //result = 31 * result + weather.hashCode();
-        result = 31 * result + idRegion.hashCode();
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + user.hashCode();
+        result = 31 * result + weather.hashCode();
+        result = 31 * result + region.hashCode();
         return result;
     }
 }

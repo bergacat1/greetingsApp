@@ -10,7 +10,7 @@ import cat.udl.eps.softarch.hello.util.Weather;
 public interface UserAlertsService {
     User getUserAndAlerts(String username);
 
-    Alert addAlertToUser(String username, Weather weather, String region, Integer regionId);
+    Alert addAlertToUser(String username, String weather, String region, Integer regionId);
 
     void removeAlertFromUser(Long alertId);
 }

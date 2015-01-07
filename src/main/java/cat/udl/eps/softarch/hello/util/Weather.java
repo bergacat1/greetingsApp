@@ -7,10 +7,28 @@ import java.util.Observer;
  * Created by http://rhizomik.net/~roberto/
  */
 
-public interface Weather  {
-    public String getName();
-    public String getImage();
-    public Weather getInstance();
-    public void addObserver(Observer o);
-    public void notifyObservers(Object arg);
+public class Weather  {
+    private String name;
+    private String image;
+
+    public Weather(String name, String image) {
+        this.name = name;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

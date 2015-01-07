@@ -1,11 +1,9 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
 import cat.udl.eps.softarch.hello.service.UserAlertsService;
-import cat.udl.eps.softarch.hello.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -33,20 +28,6 @@ public class UserController {
     @Autowired
     UserAlertsService userAlertsService;
 
-    private static final Map<String, Weather> weathers = new HashMap<String, Weather>(){
-        {
-            put("Sunny", Sunny.sunny);
-            put("SunnyAndCloudy", SunnyAndCloudy.sunnyAndCloudy);
-            put("Cloudy", Cloudy.cloudy);
-            put("Rain", Rain.rain);
-            put("Thunderstorm", Thunderstorm.thunderstorm);
-            put("Snow", Snow.snow);
-            put("Foggy", Foggy.foggy);
-            put("SnowThunderstorm", SnowThunderstorm.snowThunderstorm);
-        }
-
-
-    };
 
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public ModelAndView usersHTML() {
@@ -84,7 +65,7 @@ public class UserController {
     @RequestMapping(value = "/{user}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView usersHTML(@PathVariable("user") String username) {
         User user = retrieveUser(username);
-        logger.info("Retrieved user: " + user.getName());
+        logger.info("Retrieved user: " + user.getUsername());
         return new ModelAndView("user", "user", user);
     }
 
@@ -94,10 +75,11 @@ public class UserController {
     public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,
                        @RequestParam("region") String region, @RequestParam("weather") String weather) {
         logger.info("Creating alert:" + username + region + weather);
-        userAlertsService.addAlertToUser(username, weathers.get(weather), region, WeatherController.regions.get(region));
+        userAlertsService.addAlertToUser(username, weather, region, WeatherController.regions.get(region));
+        User user = userAlertsService.getUserAndAlerts(username);
+        logger.info("USER ALERTS:::::::::::::::::::::::::" + user.getAlerts().toString());
         /*alertRepository.save(newAlert);
         user.addAlert(newAlert);
-        logger.info("USER ALERTS:::::::::::::::::::::::::" + user.getAlerts().toString());
         userRepository.save(user);
         logger.info("ALERT!!!!!!!!!!!!!!!!!!!!!!" + userRepository.findOne(username).getAlerts().toString());*/
     }

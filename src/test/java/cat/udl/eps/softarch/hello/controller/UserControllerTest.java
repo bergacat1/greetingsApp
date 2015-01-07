@@ -1,5 +1,5 @@
 package cat.udl.eps.softarch.hello.controller;
-/*
+
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -8,8 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import cat.udl.eps.softarch.hello.config.GreetingsAppTestContext;
+import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
+import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
+import cat.udl.eps.softarch.hello.service.UserAlertsService;
 import com.google.common.primitives.Ints;
 import org.junit.After;
 import org.junit.Before;
@@ -33,20 +36,27 @@ import org.springframework.web.context.WebApplicationContext;
 public class UserControllerTest {
 
     @Autowired
-    UserRepository greetingRepository;
+    UserRepository userRepository;
+    @Autowired
+    AlertRepository alertRepository;
 
     @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    private User user;
+    private Alert alert;
 
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-        if (greetingRepository.count()==0) {
-            User g = new User("test1", "test@example.org", new Date());
-            greetingRepository.save(g);
-        }
+
+        user = new User("test", "test@test.com");
+        userRepository.save(user);
+        alert = new Alert(user, "Sol", "Segria");
+        alertRepository.save(alert);
+        user.addAlert(alert);
+        userRepository.save(user);
     }
 
     @After
@@ -56,29 +66,27 @@ public class UserControllerTest {
 
     @Test
     public void testList() throws Exception {
-        int startSize = Ints.checkedCast(greetingRepository.count());
 
-        mockMvc.perform(get("/greetings").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get("/users").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(view().name("greetings"))
-                .andExpect(forwardedUrl("/WEB-INF/views/regions.jsp"))
-                .andExpect(model().attributeExists("greetings"))
-                .andExpect(model().attribute("greetings", hasSize(startSize)))
-                .andExpect(model().attribute("greetings", hasItem( allOf(
-                        hasProperty("id", is(1L)),
-                        hasProperty("content", is("test1"))))));
+                .andExpect(view().name("users"))
+                .andExpect(forwardedUrl("/WEB-INF/views/users.jsp"));
     }
 
-    @Test
+/*    @Test
     public void testRetrieveExisting() throws Exception {
-        mockMvc.perform(get("/greetings/{id}", 1L).accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get("/users/{username}", "test").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(view().name("greeting"))
-                .andExpect(forwardedUrl("/WEB-INF/views/region.jsp"))
-                .andExpect(model().attributeExists("greeting"))
-                .andExpect(model().attribute("greeting", allOf(
-                        hasProperty("id", is(1L)),
-                        hasProperty("content", is("test1")))));
+                .andExpect(view().name("user"))
+                .andExpect(forwardedUrl("/WEB-INF/views/user.jsp"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", allOf(
+                        hasProperty("username", is("test")),
+                        hasProperty("email", is("test@test.com")),
+                        hasProperty("alerts", contains(allOf(
+                                hasProperty("user", is(user)),
+                                hasProperty("weather", is("Sol")),
+                                hasProperty("region", is("Segria"))))))));
     }
 
     @Test
@@ -229,5 +237,5 @@ public class UserControllerTest {
                 .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
 
         assertEquals(startSize, greetingRepository.count());
-    }
-}*/
+    }*/
+}

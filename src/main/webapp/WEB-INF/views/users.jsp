@@ -10,9 +10,9 @@
 <p>Aqui podreu gestionar les vostres alertes</p>
 <form method="POST" action="/users">
     <label>Username:</label>
-    <input type="text" name="username"/>
+    <input type="text" username="username"/>
     <label>Email:</label>
-    <input type="text" name="email"/>
+    <input type="text" username="email"/>
     <input type="submit" value="Entra"/>
 </form>
 

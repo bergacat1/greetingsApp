@@ -17,18 +17,18 @@
     <ul>
         <c:if test="${!user.alerts.isEmpty()}">
             <c:forEach var="alert" items="${user.alerts}">
-                <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather().getName()}</li>
+                <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()}</li>
             </c:forEach>
         </c:if>
     </ul>
 </c:if>
-<form method="POST" action="/users/${user.getName()}" >
+<form method="POST" action="/users/${user.getUsername()}" >
     <table>
         <tr>
             <td><label>Email:</label></td>
-            <td><input name="email" value="${user.getEmail()}" readonly="true"/> </td>
+            <td><input username="email" value="${user.getEmail()}" readonly="true"/> </td>
 
-            <td><select name="region">
+            <td><select username="region">
                 <option value="Alt Camp">Alt Camp</option>
                 <option value="Alt Emporda">Alt Emporda</option>
                 <option value="Alt Penedes">Alt Penedes</option>
@@ -71,15 +71,15 @@
                 <option value="Valles Occidental">Valles Occidental</option>
                 <option value="Valles Oriental">Valles Oriental</option>
             </select></td>
-            <td><select name="weather">
-                <option value="Cloudy">Nubol</option>
-                <option value="Foggy">Boira</option>
-                <option value="Rain">Pluja</option>
-                <option value="Snow">Neu</option>
-                <option value="SnowThunderstorm">Tempesta de neu</option>
-                <option value="Sunny">Sol</option>
-                <option value="SunnyAndCloudy">Sol i Nubol</option>
-                <option value="Thunderstorm">Tempesta</option>
+            <td><select username="weather">
+                <option value="Nubol">Nubol</option>
+                <option value="Boira">Boira</option>
+                <option value="Pluja">Pluja</option>
+                <option value="Neu">Neu</option>
+                <option value="Tempesta de neu">Tempesta de neu</option>
+                <option value="Sol">Sol</option>
+                <option value="Sol i nubol">Sol i Nubol</option>
+                <option value="Tempesta">Tempesta</option>
             </select></td>
         </tr>
         <tr>

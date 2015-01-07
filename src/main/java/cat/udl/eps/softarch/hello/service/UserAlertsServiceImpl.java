@@ -4,7 +4,6 @@ import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
-import cat.udl.eps.softarch.hello.util.Weather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +26,19 @@ public class UserAlertsServiceImpl implements UserAlertsService {
     @Override
     public User getUserAndAlerts(String username) {
         User u = userRepository.findOne(username);
-        logger.info("User {} has {} alerts", u.getName(), u.getAlerts().size());
+        logger.info("User {} has {} alerts", u.getUsername(), u.getAlerts().size());
         return u;
     }
 
     @Transactional
     @Override
-    public Alert addAlertToUser(String username, Weather weather, String region, Integer regionId) {
+    public Alert addAlertToUser(String username, String weather, String region, Integer regionId) {
         User u = userRepository.findOne(username);
-        Alert newAlert = new Alert(u, weather, region, regionId);
-        alertRepository.save(newAlert);
+        Alert newAlert = new Alert(u, weather, region);
         u.addAlert(newAlert);
+        alertRepository.save(newAlert);
         userRepository.save(u);
+        logger.info("DINS TRANSACTION!!!" + u.getAlerts().toString());
         return newAlert;
     }
 
@@ -46,7 +46,7 @@ public class UserAlertsServiceImpl implements UserAlertsService {
     @Override
     public void removeAlertFromUser(Long alertId) {
         Alert a = alertRepository.findOne(alertId);
-        User u = userRepository.findOne(a.getUser().getName());
+        User u = userRepository.findOne(a.getUser().getUsername());
         if (u != null) {
             u.removeAlert(a);
             userRepository.save(u);
