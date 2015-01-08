@@ -63,7 +63,7 @@ public class UserControllerTest {
     public void tearDown() throws Exception {}
 
     //TODO: Add tests for email and date greeting fields on retrieve/create/update, validation errors...
-
+/*
     @Test
     public void testList() throws Exception {
 
@@ -71,9 +71,9 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("users"))
                 .andExpect(forwardedUrl("/WEB-INF/views/users.jsp"));
-    }
+    }*/
 
-/*    @Test
+    @Test
     public void testRetrieveExisting() throws Exception {
         mockMvc.perform(get("/users/{username}", "test").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
@@ -84,11 +84,10 @@ public class UserControllerTest {
                         hasProperty("username", is("test")),
                         hasProperty("email", is("test@test.com")),
                         hasProperty("alerts", contains(allOf(
-                                hasProperty("user", is(user)),
                                 hasProperty("weather", is("Sol")),
                                 hasProperty("region", is("Segria"))))))));
     }
-
+/*
     @Test
     public void testRetrieveNonExisting() throws Exception {
         mockMvc.perform(get("/greetings/{id}", 999L).accept(MediaType.TEXT_HTML))

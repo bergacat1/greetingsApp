@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.hello.config;
 
+import cat.udl.eps.softarch.hello.util.AlertNotifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,11 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.MethodInvoker;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -28,6 +32,7 @@ import javax.sql.DataSource;
 @ComponentScan("cat.udl.eps.softarch.hello")
 @EnableJpaRepositories("cat.udl.eps.softarch.hello.repository")
 @EnableTransactionManagement
+@EnableScheduling
 public class GreetingsAppContext extends WebMvcConfigurerAdapter{
 
     @Override
@@ -73,4 +78,6 @@ public class GreetingsAppContext extends WebMvcConfigurerAdapter{
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
+
+
 }
