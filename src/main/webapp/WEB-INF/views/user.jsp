@@ -12,7 +12,7 @@
         quan es doni una determinada situació meteorologica en la comarca que seleccioneu.</p>
 </c:if>
 <c:if test="${user != null}">
-    <h1>Usuari: ${user.getName()}</h1>
+    <h1>Usuari: ${user.getUsername()}</h1>
     <h2>Llista d'alertes</h2>
     <ul>
         <c:if test="${!user.alerts.isEmpty()}">
@@ -26,9 +26,9 @@
     <table>
         <tr>
             <td><label>Email:</label></td>
-            <td><input username="email" value="${user.getEmail()}" readonly="true"/> </td>
+            <td><input name="email" value="${user.getEmail()}" readonly="true"/> </td>
 
-            <td><select username="region">
+            <td><select name="region">
                 <option value="Alt Camp">Alt Camp</option>
                 <option value="Alt Emporda">Alt Emporda</option>
                 <option value="Alt Penedes">Alt Penedes</option>
@@ -71,7 +71,7 @@
                 <option value="Valles Occidental">Valles Occidental</option>
                 <option value="Valles Oriental">Valles Oriental</option>
             </select></td>
-            <td><select username="weather">
+            <td><select name="weather">
                 <option value="Nubol">Nubol</option>
                 <option value="Boira">Boira</option>
                 <option value="Pluja">Pluja</option>

@@ -1,18 +1,18 @@
 package cat.udl.eps.softarch.hello.util;
 
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.xquery.*;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class XQueryHelper {
@@ -87,7 +87,7 @@ public class XQueryHelper {
         return songs;
     }
 
-    public static String getRegionWeather(int region) throws XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    public static int getRegionWeather(int region) throws XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
         String xquery = "declare variable $doc := doc(\"http://static-m.meteo.cat/content/opendata/ctermini_comarcal.xml\");\n"
                 + "for $c in $doc//prediccio[@idcomarca=\"" + region + "\"]/variable[@dia=\"1\"]\n"
@@ -102,9 +102,10 @@ public class XQueryHelper {
         urlconn.setReadTimeout(50000);
         XQResultSequence rs = expr.executeQuery();
         if(rs.next()) {
-            return rs.getItemAsString(null);
+            String regionWeatherNumber = rs.getItemAsString(null);
+            return Integer.parseInt(regionWeatherNumber.substring(0, regionWeatherNumber.length() - 4));
         }else{
-            return "";
+            return 0;
         }
 
     }

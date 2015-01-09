@@ -1,20 +1,19 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import java.util.*;
-
-import cat.udl.eps.softarch.hello.repository.UserRepository;
-import cat.udl.eps.softarch.hello.util.*;
+import cat.udl.eps.softarch.hello.util.Weather;
+import cat.udl.eps.softarch.hello.util.XQueryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -138,10 +137,10 @@ public class WeatherController {
     @ResponseBody
     public List retrieve(@PathVariable( "comarca" ) String comarca) {
         logger.info("Retrieving greeting number {}", comarca);
-        String regionWeather = "";
+        int regionWeather;
         try {
             regionWeather = XQueryHelper.getRegionWeather(regions.get(comarca));
-            Weather weather = weathers.get(Integer.parseInt(regionWeather.substring(0, regionWeather.length() - 4)));
+            Weather weather = weathers.get(regionWeather);
             return Arrays.asList(comarca, weather.getName(), weather.getImage());
         } catch (Exception e) {
             e.printStackTrace();

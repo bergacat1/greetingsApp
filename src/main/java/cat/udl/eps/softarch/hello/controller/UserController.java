@@ -34,7 +34,7 @@ public class UserController {
         return new ModelAndView("users");
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public void createUserIfNotExists(@RequestParam("username") String username, @RequestParam("email") String email) {
         logger.info("Retrieving user: " + username);

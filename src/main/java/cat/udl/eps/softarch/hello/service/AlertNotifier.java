@@ -1,0 +1,46 @@
+package cat.udl.eps.softarch.hello.service;
+
+import cat.udl.eps.softarch.hello.controller.WeatherController;
+import cat.udl.eps.softarch.hello.model.Alert;
+import cat.udl.eps.softarch.hello.repository.AlertRepository;
+import cat.udl.eps.softarch.hello.util.Weather;
+import cat.udl.eps.softarch.hello.util.XQueryHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Albert on 07/01/2015.
+ */
+@Service
+public class AlertNotifier {
+    @Autowired
+    MailService mailService;
+
+    @Autowired
+    AlertRepository alertRepository;
+
+    @Scheduled(fixedDelay = 30000)
+    public void notifyAlerts(){
+        for(Map.Entry<String, Integer> region: WeatherController.regions.entrySet()){
+            List<Alert> regionAlerts = alertRepository.findByRegion(region.getKey());
+            if(!regionAlerts.isEmpty()){
+                try{
+                    Weather weather = WeatherController.weathers.get(XQueryHelper.getRegionWeather(region.getValue()));
+                    for(Alert alert: regionAlerts){
+                        if(alert.getWeather().equals(weather.getName())){
+                            mailService.sendMail(alert.getUser().getEmail(),alert.getRegion(), weather.getName());
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        System.out.println("SCHEDULEEEDDD!!!");
+    }
+}
