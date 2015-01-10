@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
 import cat.udl.eps.softarch.hello.service.UserAlertsService;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
     public String userHTML(@RequestParam("username") String username, @RequestParam("email") String email) {
+        Preconditions.checkArgument(!username.isEmpty(), "Heu d'indicar un nom d'usuari.");
+        Preconditions.checkArgument(!email.isEmpty(), "Heu d'indicar un email");
         logger.info("Redirecting user: " + username);
         createUserIfNotExists(username, email);
         return "redirect:/users/" + username;
@@ -60,6 +63,7 @@ public class UserController {
     public User retrieveUser(@PathVariable("user") String username) {
         logger.info("Retrieving user: " + username);
         User user = userAlertsService.getUserAndAlerts(username);
+        Preconditions.checkNotNull(user, "L'usuari %s no s'ha trobat", username);
         return user;
     }
     @RequestMapping(value = "/{user}", method = RequestMethod.GET, produces = "text/html")

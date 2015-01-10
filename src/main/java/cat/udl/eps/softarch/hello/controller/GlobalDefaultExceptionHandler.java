@@ -35,6 +35,13 @@ class GlobalDefaultExceptionHandler {
         return contentNegotiatedErrorView(request, e);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    ModelAndView handleMethodIllegalArgumentException(HttpServletRequest request, Exception e) {
+        logger.info("Generating HTTP BAD REQUEST from IllegalArgumentException: {}", e);
+        return contentNegotiatedErrorView(request, e);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NullPointerException.class)
     ModelAndView handleNotFound(HttpServletRequest request, Exception e) {

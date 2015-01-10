@@ -2,10 +2,10 @@ package cat.udl.eps.softarch.hello.controller;
 
 import cat.udl.eps.softarch.hello.util.Weather;
 import cat.udl.eps.softarch.hello.util.XQueryHelper;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -135,7 +135,7 @@ public class WeatherController {
 // RETRIEVE
     @RequestMapping(value = "/regions/{comarca}", method = RequestMethod.GET )
     @ResponseBody
-    public List retrieve(@PathVariable( "comarca" ) String comarca) {
+    public List getRegionWeather(@PathVariable("comarca") String comarca) {
         logger.info("Retrieving greeting number {}", comarca);
         int regionWeather;
         try {
@@ -149,12 +149,7 @@ public class WeatherController {
     }
     @RequestMapping(value = "/regions/{comarca}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView retrieveHTML(@PathVariable( "comarca" ) String comarca)  {
-        if(regions.get(comarca)==null) throw new RegionNotFoundException();
-        return new ModelAndView("region", "region", retrieve(comarca));
-    }
-
-    @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No such Region")  // 404
-    public class RegionNotFoundException extends RuntimeException {
-
+        Preconditions.checkNotNull(regions.get(comarca), "La comarca %s no existeix", comarca);
+        return new ModelAndView("region", "region", getRegionWeather(comarca));
     }
 }

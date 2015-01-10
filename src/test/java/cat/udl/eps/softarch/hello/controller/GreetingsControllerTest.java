@@ -52,7 +52,7 @@ public class UserControllerTest {
     @After
     public void tearDown() throws Exception {}
 
-    //TODO: Add tests for email and date greeting fields on retrieve/create/update, validation errors...
+    //TODO: Add tests for email and date greeting fields on getRegionWeather/create/update, validation errors...
 
     @Test
     public void testList() throws Exception {

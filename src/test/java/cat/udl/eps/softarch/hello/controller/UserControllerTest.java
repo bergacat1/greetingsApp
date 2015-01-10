@@ -62,7 +62,7 @@ public class UserControllerTest {
     @After
     public void tearDown() throws Exception {}
 
-    //TODO: Add tests for email and date greeting fields on retrieve/create/update, validation errors...
+    //TODO: Add tests for email and date greeting fields on getRegionWeather/create/update, validation errors...
 /*
     @Test
     public void testList() throws Exception {
@@ -87,62 +87,64 @@ public class UserControllerTest {
                                 hasProperty("weather", is("Sol")),
                                 hasProperty("region", is("Segria"))))))));
     }
-/*
+
     @Test
     public void testRetrieveNonExisting() throws Exception {
-        mockMvc.perform(get("/greetings/{id}", 999L).accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get("/users/{username}", "badUser").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("error"))
                 .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
     }
 
     @Test
-    public void testCreate() throws Exception {
-        User last = new User("last", "test@example.org", new Date());
-        int nextGreetingId = Ints.checkedCast(greetingRepository.save(last).getId())+1;
-        int startSize = Ints.checkedCast(greetingRepository.count());
+    public void testRetrieveExistentUser() throws Exception {
+        int startSize = Ints.checkedCast(userRepository.count());
 
-        mockMvc.perform(post("/greetings")
+        mockMvc.perform(post("/users")
                         .accept(MediaType.TEXT_HTML)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("content", "newtest")
-                        .param("email", "newtest@example.org")
-                        .param("date", new Date().toString()))
+                        .param("username", "test")
+                        .param("email", "test@test.com"))
                 .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/greetings/"+nextGreetingId))
-                .andExpect(model().hasNoErrors())
-                .andExpect(model().attribute("greeting", hasProperty("content", is("newtest"))));
-
-        assertEquals(startSize+1, greetingRepository.count());
+                .andExpect(view().name("redirect:/users/test"))
+                .andExpect(model().hasNoErrors());
+                /*.andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", allOf(
+                        hasProperty("username", is("test")),
+                        hasProperty("email", is("test@test.com")))))*/;
+        assertEquals(startSize, userRepository.count());
     }
 
     @Test
-    public void testCreateEmpty() throws Exception {
-        int startSize = Ints.checkedCast(greetingRepository.count());
+    public void testCreateUser() throws Exception {
+        int startSize = Ints.checkedCast(userRepository.count());
 
-        mockMvc.perform(post("/greetings")
+        mockMvc.perform(post("/users")
                         .accept(MediaType.TEXT_HTML)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("content", ""))
-                .andExpect(status().isOk())
-                .andExpect(view().name("form"))
-                .andExpect(forwardedUrl("/WEB-INF/views/form.jsp"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrors("greeting", "content"))
-                .andExpect(model().attribute("greeting", hasProperty("content", isEmptyOrNullString())));
+                        .param("username", "newuser")
+                        .param("email", "newuser@test.com"))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/users/newuser"))
+                .andExpect(model().hasNoErrors());
 
-        assertEquals(startSize, greetingRepository.count());
+        assertEquals(startSize + 1, userRepository.count());
     }
 
     @Test
-    public void testCreateForm() throws Exception {
-        mockMvc.perform(get("/greetings/form"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("form"))
-                .andExpect(forwardedUrl("/WEB-INF/views/form.jsp"))
-                .andExpect(model().attribute("greeting", hasProperty("content", isEmptyOrNullString())));
-    }
+    public void testCreateUserBadParams() throws Exception {
+        int startSize = Ints.checkedCast(userRepository.count());
 
+        mockMvc.perform(post("/users")
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "")
+                .param("email", ""))
+                .andExpect(status().isBadRequest());
+
+        assertEquals(startSize, userRepository.count());
+    }
+/*
     @Test
     public void testUpdate() throws Exception {
         User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));

@@ -45,7 +45,7 @@ public class WeatherControllerTest {
     @After
     public void tearDown() throws Exception {}
 
-    //TODO: Add tests for email and date greeting fields on retrieve/create/update, validation errors...
+    //TODO: Add tests for email and date greeting fields on getRegionWeather/create/update, validation errors...
 
     @Test
     public void testList() throws Exception {
@@ -67,9 +67,9 @@ public class WeatherControllerTest {
     @Test
     public void testRetrieveNonExisting() throws Exception {
         mockMvc.perform(get("/regions/{comarca}", "No Existeix").accept(MediaType.TEXT_HTML))
-                .andExpect(status().isNotFound());
-               // .andExpect(view().name("error"))
-              //  .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error"))
+                .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
     }
 /*
     @Test
