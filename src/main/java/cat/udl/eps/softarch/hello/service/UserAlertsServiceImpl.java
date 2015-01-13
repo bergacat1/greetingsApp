@@ -38,13 +38,12 @@ public class UserAlertsServiceImpl implements UserAlertsService {
         u.addAlert(newAlert);
         alertRepository.save(newAlert);
         userRepository.save(u);
-        logger.info("DINS TRANSACTION!!!" + u.getAlerts().toString());
         return newAlert;
     }
 
     @Transactional
     @Override
-    public void removeAlertFromUser(Long alertId) {
+    public void removeAlertFromUser(long alertId) {
         Alert a = alertRepository.findOne(alertId);
         User u = userRepository.findOne(a.getUser().getUsername());
         if (u != null) {
@@ -52,6 +51,14 @@ public class UserAlertsServiceImpl implements UserAlertsService {
             userRepository.save(u);
         }
         alertRepository.delete(a);
+    }
+
+    @Transactional
+    @Override
+    public void changeEnabledAlert(long alertId){
+        Alert a = alertRepository.findOne(alertId);
+        a.changeEnabled();
+        alertRepository.save(a);
     }
 
 }

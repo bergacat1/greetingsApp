@@ -1,18 +1,10 @@
 package cat.udl.eps.softarch.hello.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Observable;
-import java.util.Date;
-import java.util.Observer;
-
-import cat.udl.eps.softarch.hello.util.Weather;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 
 @Entity
@@ -32,6 +24,9 @@ public class Alert implements Serializable {
     @NotBlank
     private String region;
 
+    @NotNull
+    private boolean enabled;
+
     public Alert() {}
 
 
@@ -39,9 +34,24 @@ public class Alert implements Serializable {
         this.user = user;
         this.weather = weather;
         this.region = region;
-        System.out.println("HASH----------------------------------"+weather.hashCode());
+        this.enabled = true;
+    }
+    
+    public void changeEnabled(){
+        if(enabled){
+            enabled = false;
+        }else{
+            enabled = true;
+        }
     }
 
+    public String getEnabledState(){
+        if(enabled){
+            return "Activada";
+        }else{
+            return "Desactivada";
+        }
+    }
 
     public String getWeather() {
         return weather;

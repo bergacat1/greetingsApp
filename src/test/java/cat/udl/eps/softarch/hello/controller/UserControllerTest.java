@@ -1,18 +1,10 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import java.util.Date;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import cat.udl.eps.softarch.hello.config.GreetingsAppTestContext;
 import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
-import cat.udl.eps.softarch.hello.service.UserAlertsService;
 import com.google.common.primitives.Ints;
 import org.junit.After;
 import org.junit.Before;
@@ -28,6 +20,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = GreetingsAppTestContext.class)
@@ -143,6 +141,23 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
 
         assertEquals(startSize, userRepository.count());
+    }
+
+    @Test
+    public void testCreateAlert() throws Exception {
+        int startSize = Ints.checkedCast(alertRepository.count());
+
+        mockMvc.perform(post("/users/test")
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("email", "test@test.com")
+                .param("region", "Segria")
+                .param("weather", "Sol"))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/users/test"))
+                .andExpect(model().hasNoErrors());
+
+        assertEquals(startSize + 1, alertRepository.count());
     }
 /*
     @Test

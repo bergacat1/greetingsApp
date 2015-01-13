@@ -17,7 +17,12 @@
     <ul>
         <c:if test="${!user.alerts.isEmpty()}">
             <c:forEach var="alert" items="${user.alerts}">
-                <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()}</li>
+                <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()} Estat: ${alert.getEnabledState()}
+                    <form method="POST" action="/users/${user.getUsername()}/${alert.getId()}">
+                        <input type="hidden" name="id" value=${alert.getId()}>
+                        <input type="submit" name="enable_disable" value="Activar/Desactivar">
+                        <input type="submit" name="delete" value="Eliminar">
+                    </form></li>
             </c:forEach>
         </c:if>
     </ul>
@@ -67,7 +72,7 @@
                 <option value="Tarragones">Tarragones</option>
                 <option value="Terra Alta">Terra Alta</option>
                 <option value="Urgell">Urgell</option>
-                <option value="Val Aran">Val Aran</option>
+                <option value="Vall Aran">Val Aran</option>
                 <option value="Valles Occidental">Valles Occidental</option>
                 <option value="Valles Oriental">Valles Oriental</option>
             </select></td>

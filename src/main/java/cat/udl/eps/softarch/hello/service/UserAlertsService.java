@@ -11,5 +11,7 @@ public interface UserAlertsService {
 
     Alert addAlertToUser(String username, String weather, String region, Integer regionId);
 
-    void removeAlertFromUser(Long alertId);
+    void removeAlertFromUser(long alertId);
+
+    void changeEnabledAlert(long alertId);
 }

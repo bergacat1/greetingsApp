@@ -1,31 +1,30 @@
 package cat.udl.eps.softarch.hello.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by http://rhizomik.net/~roberto/
  */
 @Entity
-//@Table(username = "USER")
 public class User implements Serializable{
 
     @Id
     @NotBlank(message = "Username cannot be empty")
-    //@Column(username = "USERNAME")
     @Size(max = 30, message = "The username is too long")
     private String username;
 
     @NotBlank(message = "E-mail cannot be empty")
     @Email(message = "E-mail should be valid")
-    //@Column(username = "EMAIL")
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
@@ -57,9 +56,7 @@ public class User implements Serializable{
     public String getEmail() { return email; }
 
     public void addAlert(Alert alert){
-        System.out.println("ADD--------------------------------------------------");
         this.alerts.add(alert);
-        System.out.println(alerts.toString());
     }
 
     public List<Alert> getAlerts() {

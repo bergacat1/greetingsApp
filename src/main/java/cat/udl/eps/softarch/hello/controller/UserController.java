@@ -81,18 +81,33 @@ public class UserController {
         logger.info("Creating alert:" + username + region + weather);
         userAlertsService.addAlertToUser(username, weather, region, WeatherController.regions.get(region));
         User user = userAlertsService.getUserAndAlerts(username);
-        logger.info("USER ALERTS:::::::::::::::::::::::::" + user.getAlerts().toString());
         /*alertRepository.save(newAlert);
         user.addAlert(newAlert);
         userRepository.save(user);
         logger.info("ALERT!!!!!!!!!!!!!!!!!!!!!!" + userRepository.findOne(username).getAlerts().toString());*/
     }
+    @RequestMapping(value = "/{user}/{id}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html", params = { "enable_disable" })
+    public String changeStateAndReloadHTML(@PathVariable("user") String username, @PathVariable("id") String id,
+                                      @RequestParam String enable_disable, @RequestParam("id") long alertId) {
+        logger.info("Managing alert:" + enable_disable + alertId);
+        userAlertsService.changeEnabledAlert(alertId);
+        return "redirect:/users/" + username;
+    }
+
+    @RequestMapping(value = "/{user}/{id}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html", params = { "delete" })
+    public String deleteAndReloadHTML(@PathVariable("user") String username, @PathVariable("id") String id,
+                                      @RequestParam String delete, @RequestParam("id") long alertId) {
+        logger.info("Managing alert:" + delete + alertId);
+        userAlertsService.removeAlertFromUser(alertId);
+        return "redirect:/users/" + username;
+    }
     @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
-    public String reloadHTML(@PathVariable("user") String username, @RequestParam("email") String email,
+    public String saveAndReloadHTML(@PathVariable("user") String username, @RequestParam("email") String email,
                              @RequestParam("region") String region, @RequestParam("weather") String weather) {
         saveAlert(username, email, region, weather);
         return "redirect:/users/" + username;
     }
+
 
 
 

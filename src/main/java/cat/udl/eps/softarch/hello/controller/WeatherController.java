@@ -29,7 +29,7 @@ public class WeatherController {
     public static Weather rain = new Weather("Pluja", "http://us.123rf.com/450wm/lineartestpilot/lineartestpilot1408/lineartestpilot140802312/30780785-nube-de-lluvia-de-dibujos-animados.jpg");
     public static Weather snow = new Weather("Neu", "http://franciscoponce.com/wp-content/uploads/2007/12/Nieve_y_Navidad.jpg");
     public static Weather snowThunderstorm = new Weather("Tempesta de neu", "http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2013/2/6/1360155536870/Thundersnow-will-this-bec-011.jpg");
-    public static Weather sunnyAndCloudy = new Weather("Sol i nubols", "http://thumb7.shutterstock.com/display_pic_with_logo/540784/104489459/stock-photo-sun-character-and-cloud-as-a-symbol-of-sunny-weather-peeking-through-a-cloudy-sky-showing-fun-104489459.jpg");
+    public static Weather sunnyAndCloudy = new Weather("Sol i nubol", "http://thumb7.shutterstock.com/display_pic_with_logo/540784/104489459/stock-photo-sun-character-and-cloud-as-a-symbol-of-sunny-weather-peeking-through-a-cloudy-sky-showing-fun-104489459.jpg");
     public static Weather thunderstorm = new Weather("Tempesta", "http://previews.123rf.com/images/bruno1998/bruno19981105/bruno1998110500022/9517548-cartoon-illustration-showing-an-angry-dark-cloud-with-lightning-coming-out-of-it.jpg");
 
 
@@ -49,8 +49,8 @@ public class WeatherController {
             put("Baix Penedes",12);
             put("Barcelones",13);
             put("Bergueda",14);
-            put("La Cerdanya",15);
-            put("Conca de barbera",16);
+            put("Cerdanya",15);
+            put("Conca Barbera",16);
             put("Garraf",17);
             put("Garrigues",18);
             put("Garrotxa",19);
@@ -69,7 +69,7 @@ public class WeatherController {
             put("Segarra",32);
             put("Segria",33);
             put("Selva",34);
-            put("Solsolnes",35);
+            put("Solsones",35);
             put("Tarragones",36);
             put("Terra Alta",37);
             put("Urgell",38);
