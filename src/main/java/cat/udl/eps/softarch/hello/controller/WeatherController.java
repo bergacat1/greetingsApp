@@ -10,10 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -39,7 +36,7 @@ public class WeatherController {
             put("Alt Emporda",2);
             put("Alt Penedes",3);
             put("Alt Urgell",4);
-            put("Alta Ribagorça",5);
+            put("Alta Ribagorca",5);
             put("Anoia",6);
             put("Bages",7);
             put("Baix Camp",8);
@@ -124,7 +121,9 @@ public class WeatherController {
     public Iterable<String> list(@RequestParam(required=false, defaultValue="0") int page,
                                    @RequestParam(required=false, defaultValue="10") int size) {
         PageRequest request = new PageRequest(page, size);
-        return regions.keySet();
+        List<String> regionsSet = new ArrayList(regions.keySet());
+        Collections.sort(regionsSet);
+        return regionsSet;
     }
     @RequestMapping(value = "/regions", method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
