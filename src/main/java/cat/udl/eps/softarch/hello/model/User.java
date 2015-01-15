@@ -21,11 +21,11 @@ public class User implements Serializable{
     @Id
     @NotBlank(message = "Username cannot be empty")
     @Size(max = 30, message = "The username is too long")
-    private String username;
+    public String username;
 
     @NotBlank(message = "E-mail cannot be empty")
     @Email(message = "E-mail should be valid")
-    private String email;
+    public String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
     public List<Alert> alerts;

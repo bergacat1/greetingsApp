@@ -13,19 +13,19 @@ public class Alert implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    public long id;
 
     @ManyToOne
-    private User user;
+    public User user;
 
     @NotBlank
-    private String weather;
+    public String weather;
 
     @NotBlank
-    private String region;
+    public String region;
 
     @NotNull
-    private boolean enabled;
+    public boolean enabled;
 
     public Alert() {}
 
