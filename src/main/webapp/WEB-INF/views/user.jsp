@@ -18,7 +18,7 @@
         <c:if test="${!user.alerts.isEmpty()}">
             <c:forEach var="alert" items="${user.alerts}">
                 <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()} Estat: ${alert.getEnabledState()}
-                    <form method="POST" action="/users/${user.getUsername()}/${alert.getId()}">
+                    <form method="POST" action="/users/${user.getUsername()}<%--/${alert.getId()}--%>">
                         <input type="hidden" name="id" value=${alert.getId()}>
                         <input type="submit" name="enable_disable" value="Activar/Desactivar">
                         <input type="submit" name="delete" value="Eliminar">
@@ -88,7 +88,7 @@
             </select></td>
         </tr>
         <tr>
-            <td><input type="submit" value="Afegeix l'alerta" /></td>
+            <td><input type="submit" name="addAlert" value="Afegeix l'alerta" /></td>
         </tr>
     </table>
 </form>
