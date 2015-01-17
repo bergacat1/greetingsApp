@@ -10,8 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -36,24 +39,25 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void createUserIfNotExists(@RequestParam("username") String username, @RequestParam("email") String email) {
-        logger.info("Retrieving user: " + username);
-        User user = userRepository.findOne(username);
-        if (user == null){
-            user = new User(username, email);
-            logger.info("New user: " + username + email);
-            userRepository.save(user);
-        }
+    public User createUserIfNotExists(@RequestBody User user, HttpServletResponse response) {
+        logger.info("Retrieving user: " + user.username);
+        User newUser = userAlertsService.createUser(user);
+        response.setHeader("Location", "/users/" + newUser.getUsername());
+        return newUser;
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
-    public String userHTML(@RequestParam("username") String username, @RequestParam("email") String email) {
-        Preconditions.checkArgument(!username.isEmpty(), "Heu d'indicar un nom d'usuari.");
-        Preconditions.checkArgument(!email.isEmpty(), "Heu d'indicar un email");
-        logger.info("Redirecting user: " + username);
-        createUserIfNotExists(username, email);
-        return "redirect:/users/" + username;
+    public String userHTML(@ModelAttribute("User") User user, BindingResult binding, HttpServletResponse response) {
+//        Preconditions.checkArgument(!username.isEmpty(), "Heu d'indicar un nom d'usuari.");
+//        Preconditions.checkArgument(!email.isEmpty(), "Heu d'indicar un email");
+        if (binding.hasErrors()) {
+            logger.info("Validation error: {}", binding);
+            return "redirect:/users";
+        }
+        logger.info("Redirecting user: " + user.username);
+        return "redirect:/users/" + createUserIfNotExists(user, response).username;
     }
 
 
@@ -73,7 +77,7 @@ public class UserController {
         return new ModelAndView("user", "user", user);
     }
 
-    @RequestMapping(value = "/{user}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,

@@ -135,7 +135,7 @@ public class WeatherController {
     @RequestMapping(value = "/regions/{comarca}", method = RequestMethod.GET )
     @ResponseBody
     public List getRegionWeather(@PathVariable("comarca") String comarca) {
-        logger.info("Retrieving greeting number {}", comarca);
+        logger.info("Retrieving comarca: {}", comarca);
         int regionWeather;
         try {
             regionWeather = XQueryHelper.getRegionWeather(regions.get(comarca));

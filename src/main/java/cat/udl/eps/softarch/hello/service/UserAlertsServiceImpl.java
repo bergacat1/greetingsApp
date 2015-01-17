@@ -22,11 +22,26 @@ public class UserAlertsServiceImpl implements UserAlertsService {
     @Autowired
     UserRepository userRepository;
 
+    @Transactional
+    @Override
+    public User createUser(User user){
+        User newUser = userRepository.findOne(user.username);
+        if (newUser == null){
+            logger.info("New user: " + user.username + user.email);
+            userRepository.save(user);
+            return user;
+        }
+        return newUser;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public User getUserAndAlerts(String username) {
         User u = userRepository.findOne(username);
-        logger.info("User {} has {} alerts", u.getUsername(), u.getAlerts().size());
+        if(u != null){
+            logger.info("User {} has {} alerts", u.getUsername(), u.getAlerts().size());
+        }
+
         return u;
     }
 
