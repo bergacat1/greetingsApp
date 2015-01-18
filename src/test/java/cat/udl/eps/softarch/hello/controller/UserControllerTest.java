@@ -23,6 +23,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,7 +60,8 @@ public class UserControllerTest {
     }
 
     @After
-    public void tearDown() throws Exception {}
+    public void tearDown() throws Exception {
+    }
 
     //TODO: Add tests for email and date greeting fields on getRegionWeather/create/update, validation errors...
 /*
@@ -99,17 +102,13 @@ public class UserControllerTest {
         int startSize = Ints.checkedCast(userRepository.count());
 
         mockMvc.perform(post("/users")
-                        .accept(MediaType.TEXT_HTML)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("username", "test")
-                        .param("email", "test@test.com"))
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "test")
+                .param("email", "test@test.com"))
                 .andExpect(status().isFound())
                 .andExpect(view().name("redirect:/users/test"))
                 .andExpect(model().hasNoErrors());
-                /*.andExpect(model().attributeExists("user"))
-                .andExpect(model().attribute("user", allOf(
-                        hasProperty("username", is("test")),
-                        hasProperty("email", is("test@test.com")))))*/;
         assertEquals(startSize, userRepository.count());
     }
 
@@ -118,15 +117,26 @@ public class UserControllerTest {
         int startSize = Ints.checkedCast(userRepository.count());
 
         mockMvc.perform(post("/users")
-                        .accept(MediaType.TEXT_HTML)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("username", "newuser")
-                        .param("email", "newuser@test.com"))
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "newuser")
+                .param("email", "newuser@test.com"))
                 .andExpect(status().isFound())
                 .andExpect(view().name("redirect:/users/newuser"))
                 .andExpect(model().hasNoErrors());
 
         assertEquals(startSize + 1, userRepository.count());
+
+        mockMvc.perform(get("/users/{username}", "newuser")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user"))
+                .andExpect(forwardedUrl("/WEB-INF/views/user.jsp"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", allOf(
+                        hasProperty("username", is("newuser")),
+                        hasProperty("email", is("newuser@test.com")),
+                        hasProperty("alerts", hasSize(0)))));
     }
 
     @Test
@@ -150,108 +160,47 @@ public class UserControllerTest {
         mockMvc.perform(post("/users/test")
                 .accept(MediaType.TEXT_HTML)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", "test@test.com")
                 .param("region", "Segria")
-                .param("weather", "Sol"))
+                .param("weather", "Sol")
+                .param("addAlert", "Afegir"))
                 .andExpect(status().isFound())
                 .andExpect(view().name("redirect:/users/test"))
                 .andExpect(model().hasNoErrors());
 
         assertEquals(startSize + 1, alertRepository.count());
     }
-/*
-    @Test
-    public void testUpdate() throws Exception {
-        User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));
-        int startSize = Ints.checkedCast(greetingRepository.count());
 
-        mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("content", "updated")
-                        .param("email", "newtest@example.org")
-                        .param("date", new Date().toString()))
+    @Test
+    public void testDeleteAlert() throws Exception {
+        int startSize = Ints.checkedCast(alertRepository.count());
+
+        mockMvc.perform(post("/users/test")
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", String.valueOf(alert.getId()))
+                .param("delete", "Eliminar"))
                 .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/greetings/"+tobeupdated.getId()))
+                .andExpect(view().name("redirect:/users/test"))
                 .andExpect(model().hasNoErrors());
 
-        assertEquals("updated", greetingRepository.findOne(tobeupdated.getId()).getContent());
-        assertEquals(startSize, greetingRepository.count());
+        assertEquals(startSize - 1, alertRepository.count());
     }
 
     @Test
-    public void testUpdateEmpty() throws Exception {
-        User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));
-        int startSize = Ints.checkedCast(greetingRepository.count());
+    public void testDisableAlert() throws Exception {
+        assertTrue(alertRepository.findOne(alert.getId()).enabled);
 
-        mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("content", ""))
-                .andExpect(status().isOk())
-                .andExpect(view().name("form"))
-                .andExpect(forwardedUrl("/WEB-INF/views/form.jsp"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrors("greeting", "content"))
-                .andExpect(model().attribute("greeting", hasProperty("content", isEmptyOrNullString())));
-
-        assertEquals(startSize, greetingRepository.count());
-    }
-
-    @Test
-    public void testUpdateNonExisting() throws Exception {
-        int startSize = Ints.checkedCast(greetingRepository.count());
-
-        mockMvc.perform(put("/greetings/{id}", 999L)
-                        .accept(MediaType.TEXT_HTML)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("content", "updated")
-                        .param("email", "newtest@example.org")
-                        .param("date", new Date().toString()))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("error"))
-                .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
-
-        assertEquals(startSize, greetingRepository.count());
-    }
-
-    @Test
-    public void testUpdateForm() throws Exception {
-        mockMvc.perform(get("/greetings/{id}/form", 1L))
-                .andExpect(status().isOk())
-                .andExpect(view().name("form"))
-                .andExpect(forwardedUrl("/WEB-INF/views/form.jsp"))
-                .andExpect(model().attribute("greeting", hasProperty("content", is("test1"))));
-    }
-
-    @Test
-    public void testUpdateFormNonExisting() throws Exception {
-        mockMvc.perform(get("/greetings/{id}/form", 999L).accept(MediaType.TEXT_HTML))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("error"))
-                .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
-    }
-
-    @Test
-    public void testDeleteExisting() throws Exception {
-        User toBeRemoved = greetingRepository.save(new User("toberemoved", "a@b.net", new Date()));
-        int startSize = Ints.checkedCast(greetingRepository.count());
-
-        mockMvc.perform(delete("/greetings/{id}", toBeRemoved.getId()).accept(MediaType.TEXT_HTML))
+        mockMvc.perform(post("/users/test")
+                .accept(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", String.valueOf(alert.getId()))
+                .param("enable_disable", "Activar/Desactivar"))
                 .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/greetings"));
+                .andExpect(view().name("redirect:/users/test"))
+                .andExpect(model().hasNoErrors())
+        ;
 
-        assertEquals(startSize-1, greetingRepository.count());
-        assertThat(greetingRepository.findAll(), not(hasItem(toBeRemoved)));
+        assertFalse(alertRepository.findOne(alert.getId()).enabled);
+
     }
-
-    @Test
-    public void testDeleteNonExisting() throws Exception {
-        int startSize = Ints.checkedCast(greetingRepository.count());
-
-        mockMvc.perform(delete("/greetings/{id}", 999L).accept(MediaType.TEXT_HTML))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("error"))
-                .andExpect(forwardedUrl("/WEB-INF/views/error.jsp"));
-
-        assertEquals(startSize, greetingRepository.count());
-    }*/
 }

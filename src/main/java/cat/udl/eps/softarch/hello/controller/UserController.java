@@ -76,7 +76,7 @@ public class UserController {
     @RequestMapping(value = "/{user}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,
+    public void saveAlert(@PathVariable("user") String username,
                        @RequestParam("region") String region, @RequestParam("weather") String weather) {
         logger.info("Creating alert:" + username + region + weather);
         userAlertsService.addAlertToUser(username, weather, region, WeatherController.regions.get(region));
@@ -102,9 +102,9 @@ public class UserController {
         return "redirect:/users/" + username;
     }
     @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html", params = { "addAlert" })
-    public String saveAndReloadHTML(@PathVariable("user") String username, @RequestParam String addAlert, @RequestParam("email") String email,
+    public String saveAndReloadHTML(@PathVariable("user") String username, @RequestParam String addAlert,
                              @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        saveAlert(username, email, region, weather);
+        saveAlert(username, region, weather);
         return "redirect:/users/" + username;
     }
 

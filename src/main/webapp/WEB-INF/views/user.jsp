@@ -30,9 +30,6 @@
 <form method="POST" action="/users/${user.getUsername()}" >
     <table>
         <tr>
-            <td><label>Email:</label></td>
-            <td><input name="email" value="${user.getEmail()}" readonly="true"/> </td>
-
             <td><select name="region">
                 <option value="Alt Camp">Alt Camp</option>
                 <option value="Alt Emporda">Alt Emporda</option>
