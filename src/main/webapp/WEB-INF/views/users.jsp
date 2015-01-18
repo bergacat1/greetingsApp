@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <body>
+<div align="center">
 
 
 <h1>Alertes meteorologiques</h1>
@@ -16,6 +17,7 @@
     <input type="submit" value="Entra"/>
 </form>
 
-<a href="/">Torna a l'inici </a>
+<p><a href="/">Torna a l'inici </a></p>
+</div>
 </body>
 </html>

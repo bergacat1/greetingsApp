@@ -9,16 +9,17 @@
     }
 </script>
 <body>
-<h1>Prediccio del temps</h1>
+<div align="center">
+<h1 >Prediccio del temps</h1>
 <h2>Llista de comarques</h2>
 
 <p>Podeu consultar el temps del següent dia en la comarca que desitjeu.</p>
-<ul>
     <c:if test="${not empty regions}">
         <c:forEach var="region" items="${regions}">
-            <li><a href="/regions/${region}">${region}</a></li>
+            <p></p><a href="/regions/${region}">${region}</a></p>
         </c:forEach>
     </c:if>
-</ul>
+<a href="/">Torna a l'inici</a>
+</div>
 </body>
 </html>

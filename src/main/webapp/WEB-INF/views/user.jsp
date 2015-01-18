@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <body>
+<div align="center">
 
 <p>Podeu consultar el temps del següent dia en la comarca que desitjeu.</p>
 <c:if test="${user == null}">
@@ -17,12 +18,12 @@
     <ul>
         <c:if test="${!user.alerts.isEmpty()}">
             <c:forEach var="alert" items="${user.alerts}">
-                <li>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()} Estat: ${alert.getEnabledState()}
+                <p>Comarca: ${alert.getRegion()} Temps: ${alert.getWeather()} Estat: ${alert.getEnabledState()}
                     <form method="POST" action="/users/${user.getUsername()}<%--/${alert.getId()}--%>">
                         <input type="hidden" name="id" value=${alert.getId()}>
                         <input type="submit" name="enable_disable" value="Activar/Desactivar">
                         <input type="submit" name="delete" value="Eliminar">
-                    </form></li>
+                    </form></p>
             </c:forEach>
         </c:if>
     </ul>
@@ -89,7 +90,8 @@
         </tr>
     </table>
 </form>
-
-<a href="/">Torna a l'inici </a>
+<p><a href="/users">Canviar d'usuari </a></p>
+<p><a href="/">Torna a l'inici </a></p>
+</div>
 </body>
 </html>
