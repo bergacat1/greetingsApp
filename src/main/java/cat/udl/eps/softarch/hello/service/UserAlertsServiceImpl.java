@@ -47,13 +47,12 @@ public class UserAlertsServiceImpl implements UserAlertsService {
 
     @Transactional
     @Override
-    public Alert addAlertToUser(String username, String weather, String region, Integer regionId) {
-        User u = userRepository.findOne(username);
-        Alert newAlert = new Alert(u, weather, region);
-        u.addAlert(newAlert);
-        alertRepository.save(newAlert);
+    public Alert addAlertToUser(Alert alert) {
+        User u = userRepository.findOne(alert.user.username);
+        u.addAlert(alert);
+        alertRepository.save(alert);
         userRepository.save(u);
-        return newAlert;
+        return alert;
     }
 
     @Transactional

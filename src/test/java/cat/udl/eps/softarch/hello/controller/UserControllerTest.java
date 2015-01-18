@@ -112,7 +112,7 @@ public class UserControllerTest {
                         hasProperty("email", is("test@test.com")))))*/;
         assertEquals(startSize, userRepository.count());
     }
-
+/*
     @Test
     public void testCreateUser() throws Exception {
         int startSize = Ints.checkedCast(userRepository.count());
@@ -159,7 +159,7 @@ public class UserControllerTest {
 
         assertEquals(startSize + 1, alertRepository.count());
     }
-/*
+
     @Test
     public void testUpdate() throws Exception {
         User tobeupdated = greetingRepository.save(new User("tobeupdated", "a@b.net", new Date()));

@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.hello.controller;
 
+import cat.udl.eps.softarch.hello.model.Alert;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.AlertRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
@@ -42,7 +43,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public User createUserIfNotExists(@RequestBody User user, HttpServletResponse response) {
-        logger.info("Retrieving user: " + user.username);
+        logger.info("Retrieving user: " + user);
         User newUser = userAlertsService.createUser(user);
         response.setHeader("Location", "/users/" + newUser.getUsername());
         return newUser;
@@ -77,14 +78,12 @@ public class UserController {
         return new ModelAndView("user", "user", user);
     }
 
-    @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
+    @RequestMapping(value = "/{user}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void saveAlert(@PathVariable("user") String username, @RequestParam("email") String email,
-                       @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        logger.info("Creating alert:" + username + region + weather);
-        userAlertsService.addAlertToUser(username, weather, region, WeatherController.regions.get(region));
-        User user = userAlertsService.getUserAndAlerts(username);
+    public void saveAlert(@PathVariable("user") String username, @RequestBody Alert alert) {
+        logger.info("Creating alert:" + alert.user.username + alert.region + alert.weather);
+        userAlertsService.addAlertToUser(alert);
         /*alertRepository.save(newAlert);
         user.addAlert(newAlert);
         userRepository.save(user);
@@ -108,7 +107,7 @@ public class UserController {
     @RequestMapping(value = "/{user}", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html", params = { "addAlert" })
     public String saveAndReloadHTML(@PathVariable("user") String username, @RequestParam String addAlert, @RequestParam("email") String email,
                              @RequestParam("region") String region, @RequestParam("weather") String weather) {
-        saveAlert(username, email, region, weather);
+        //saveAlert(username, email, region, weather);
         return "redirect:/users/" + username;
     }
 
